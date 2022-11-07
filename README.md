@@ -1,11 +1,6 @@
 # NOAA GLERL Code Gallery
 
-```{image} ../images/XX.png
-:alt: GLERL ?
-:width: 770px
-```
-
-The NOAA GLERL Code Gallery is a...
+The [NOAA GLERL Code Gallery](https://noaa-glerl.github.io/) is a collection...
 
 
 Feedback and questions are welcome, 
