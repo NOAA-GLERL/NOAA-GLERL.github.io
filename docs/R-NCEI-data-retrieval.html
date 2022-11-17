@@ -1,0 +1,1073 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Use R to retrieve data from NCEI &#8212; NOAA GLERL Code Gallery</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Access FVCOM model output from THREDDs Server" href="access-fvcom-from-thredds.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">NOAA GLERL Code Gallery</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    NOAA GLERL Code Gallery Start Page
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Getting Started
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="mymarkdownfile.html">
+   Here’s my sample title
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Data Access
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="access-fvcom-from-thredds.html">
+   Access FVCOM model output from THREDDs Server
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Use R to retrieve data from NCEI
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Other Resources
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference external" href="http://unidata.github.io/notebook-gallery/">
+   Unidata Jupyter Notebook Gallery
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/NOAA-GLERL/NOAA-GLERL.github.io/master?urlpath=tree/docs/R-NCEI-data-retrieval.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/NOAA-GLERL/NOAA-GLERL.github.io"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/NOAA-GLERL/NOAA-GLERL.github.io/issues/new?title=Issue%20on%20page%20%2FR-NCEI-data-retrieval.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/R-NCEI-data-retrieval.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#import-packages">
+   Import packages
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#set-working-directory">
+   Set working directory
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#read-in-ncei-data-using-api-call">
+   Read in NCEI Data Using API Call
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#use-set-operations-to-identify-differences-in-data-structure">
+   Use Set Operations to Identify Differences in Data Structure
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#save-dataframe-as-csv-for-use-downstream">
+   Save Dataframe as CSV for Use Downstream
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Use R to retrieve data from NCEI</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#import-packages">
+   Import packages
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#set-working-directory">
+   Set working directory
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#read-in-ncei-data-using-api-call">
+   Read in NCEI Data Using API Call
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#use-set-operations-to-identify-differences-in-data-structure">
+   Use Set Operations to Identify Differences in Data Structure
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#save-dataframe-as-csv-for-use-downstream">
+   Save Dataframe as CSV for Use Downstream
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="use-r-to-retrieve-data-from-ncei">
+<h1>Use R to retrieve data from NCEI<a class="headerlink" href="#use-r-to-retrieve-data-from-ncei" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1">#&#39; R Code for Retrieving NCEI Data</span>
+<span class="c1">#&#39; Contains functions for retrieving WLE weekly monitoring data</span>
+<span class="c1">#&#39; from NCEI website and consolidating into one csv file for downstream</span>
+<span class="c1">#&#39; analysis.</span>
+<span class="c1">#&#39; </span>
+<span class="c1">#&#39; Christine Kitchens</span>
+<span class="c1">#&#39; University of Michigan</span>
+<span class="c1">#&#39; Cooperative Institute for Great Lakes Research</span>
+<span class="c1">#&#39; chknight@umich.edu</span>
+<span class="c1">#&#39; August 2022</span>
+
+<span class="c1"># 0 - Install Packages ----------------------------------------------------</span>
+
+<span class="c1"># install.packages(&quot;httr&quot;)</span>
+<span class="c1"># install.packages(&quot;lubridate&quot;)</span>
+<span class="c1"># install.packages(&quot;tidyverse&quot;)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="import-packages">
+<h2>Import packages<a class="headerlink" href="#import-packages" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">httr</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">lubridate</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Attaching package: &#39;lubridate&#39;
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The following object is masked from &#39;package:base&#39;:
+
+    date
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Registered S3 methods overwritten by &#39;ggplot2&#39;:
+  method         from 
+  [.quosures     rlang
+  c.quosures     rlang
+  print.quosures rlang
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Registered S3 method overwritten by &#39;rvest&#39;:
+  method            from
+  read_xml.response xml2
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-- Attaching packages --------------------------------------- tidyverse 1.2.1 --
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>v ggplot2 3.1.1       v purrr   0.3.2  
+v tibble  2.1.1       v dplyr   0.8.0.1
+v tidyr   0.8.3       v stringr 1.4.0  
+v readr   1.3.1       v forcats 0.4.0  
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x lubridate::as.difftime() masks base::as.difftime()
+x lubridate::date()        masks base::date()
+x dplyr::filter()          masks stats::filter()
+x lubridate::intersect()   masks base::intersect()
+x dplyr::lag()             masks stats::lag()
+x lubridate::setdiff()     masks base::setdiff()
+x lubridate::union()       masks base::union()
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="set-working-directory">
+<h2>Set working directory<a class="headerlink" href="#set-working-directory" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate file path to working directory based on OS in use. OS.type will</span>
+<span class="c1"># return &quot;unix&quot; if on Mac and &quot;windows&quot; if on PC.</span>
+<span class="nf">if</span><span class="p">(</span><span class="n">.Platform</span><span class="o">$</span><span class="n">OS.type</span> <span class="o">==</span> <span class="s">&quot;unix&quot;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">file_path</span> <span class="o">&lt;-</span> <span class="nf">file.path</span><span class="p">(</span><span class="s">&quot;/volumes&quot;</span><span class="p">,</span>
+                           <span class="s">&quot;GoogleDrive&quot;</span><span class="p">,</span>
+                           <span class="s">&quot;Shared drives&quot;</span><span class="p">,</span>
+                           <span class="s">&quot;WE Stoichiometry paper&quot;</span><span class="p">,</span>
+                           <span class="s">&quot;R&quot;</span><span class="p">,</span>
+                           <span class="n">fsep</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="p">)</span>
+<span class="p">}</span> <span class="n">else</span> <span class="p">{</span>
+  <span class="n">file_path</span> <span class="o">&lt;-</span> <span class="nf">file.path</span><span class="p">(</span><span class="s">&quot;C:&quot;</span><span class="p">,</span>
+                           <span class="s">&quot;masonl&quot;</span><span class="p">,</span>
+                           <span class="s">&quot;_py&quot;</span><span class="p">,</span>
+                           <span class="s">&quot;ncei&quot;</span><span class="p">,</span>
+                           <span class="n">fsep</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nf">setwd</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="read-in-ncei-data-using-api-call">
+<h2>Read in NCEI Data Using API Call<a class="headerlink" href="#read-in-ncei-data-using-api-call" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1">#&#39; Obtain urls linking to NCEI data for both 2012-2018 data files and 2019 data file</span>
+<span class="n">path_2018</span> <span class="o">=</span> <span class="s">&#39;https://www.nodc.noaa.gov/archive/arc0135/0187718/2.2/data/0-data/lake_erie_habs_field_sampling_results_2012_2018_v2.csv&#39;</span>
+<span class="n">path_2019</span> <span class="o">=</span> <span class="s">&#39;https://www.nodc.noaa.gov/archive/arc0152/0209116/1.1/data/0-data/lake_erie_habs_field_sampling_results_2019.csv&#39;</span>
+<span class="n">path_2021</span> <span class="o">=</span> <span class="s">&#39;https://www.nodc.noaa.gov/archive/arc0204/0254720/1.1/data/0-data/noaa-glerl-erie-habs-field-sampling-results-2020-2021.csv&#39;</span>
+
+<span class="c1">#&#39; Use GET to make REST API call to website</span>
+<span class="n">file_2018</span> <span class="o">&lt;-</span> <span class="nf">GET</span><span class="p">(</span><span class="n">url</span> <span class="o">=</span> <span class="n">path_2018</span><span class="p">)</span>
+<span class="n">file_2019</span> <span class="o">&lt;-</span> <span class="nf">GET</span><span class="p">(</span><span class="n">url</span> <span class="o">=</span> <span class="n">path_2019</span><span class="p">)</span>
+<span class="n">file_2021</span> <span class="o">&lt;-</span> <span class="nf">GET</span><span class="p">(</span><span class="n">url</span> <span class="o">=</span> <span class="n">path_2021</span><span class="p">)</span>
+
+<span class="c1">#&#39; Turn raw content into csvs</span>
+<span class="n">file_2018</span> <span class="o">&lt;-</span> <span class="nf">content</span><span class="p">(</span><span class="n">file_2018</span><span class="p">,</span> <span class="n">as</span> <span class="o">=</span> <span class="s">&#39;raw&#39;</span><span class="p">)</span>
+<span class="nf">writeBin</span><span class="p">(</span><span class="n">file_2018</span><span class="p">,</span> <span class="s">&#39;data/NCEI_data_2018.csv&#39;</span><span class="p">)</span>
+
+<span class="n">file_2019</span> <span class="o">&lt;-</span> <span class="nf">content</span><span class="p">(</span><span class="n">file_2019</span><span class="p">,</span> <span class="n">as</span> <span class="o">=</span> <span class="s">&#39;raw&#39;</span><span class="p">)</span>
+<span class="nf">writeBin</span><span class="p">(</span><span class="n">file_2019</span><span class="p">,</span> <span class="s">&#39;data/NCEI_data_2019.csv&#39;</span><span class="p">)</span>
+
+<span class="n">file_2021</span> <span class="o">&lt;-</span> <span class="nf">content</span><span class="p">(</span><span class="n">file_2021</span><span class="p">,</span> <span class="n">as</span> <span class="o">=</span> <span class="s">&#39;raw&#39;</span><span class="p">)</span>
+<span class="nf">writeBin</span><span class="p">(</span><span class="n">file_2021</span><span class="p">,</span> <span class="s">&#39;data/NCEI_data_2021.csv&#39;</span><span class="p">)</span>
+
+
+<span class="n">df_2018</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span>
+  <span class="n">file</span> <span class="o">=</span> <span class="s">&#39;data/NCEI_data_2018.csv&#39;</span><span class="p">,</span>
+  <span class="n">header</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> <span class="n">dec</span> <span class="o">=</span> <span class="s">&#39;,&#39;</span><span class="p">,</span>
+  <span class="n">strip.white</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+  <span class="n">na.strings</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">),</span>
+  <span class="n">check.names</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+  <span class="n">fileEncoding</span> <span class="o">=</span> <span class="s">&#39;WINDOWS-1252&#39;</span><span class="p">)</span>
+
+<span class="n">df_2019</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span>
+  <span class="n">file</span> <span class="o">=</span> <span class="s">&#39;data/NCEI_data_2019.csv&#39;</span><span class="p">,</span>
+  <span class="n">header</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+  <span class="n">dec</span> <span class="o">=</span> <span class="s">&#39;,&#39;</span><span class="p">,</span>
+  <span class="n">strip.white</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+  <span class="n">na.strings</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">),</span>
+  <span class="n">check.names</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+  <span class="n">fileEncoding</span> <span class="o">=</span> <span class="s">&#39;WINDOWS-1252&#39;</span><span class="p">)</span>
+
+<span class="n">df_2021</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span>
+  <span class="n">file</span> <span class="o">=</span> <span class="s">&#39;data/NCEI_data_2021.csv&#39;</span><span class="p">,</span>
+  <span class="n">header</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+  <span class="n">dec</span> <span class="o">=</span> <span class="s">&#39;,&#39;</span><span class="p">,</span>
+  <span class="n">strip.white</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span>
+  <span class="n">na.strings</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">),</span>
+  <span class="n">check.names</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="use-set-operations-to-identify-differences-in-data-structure">
+<h2>Use Set Operations to Identify Differences in Data Structure<a class="headerlink" href="#use-set-operations-to-identify-differences-in-data-structure" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">colnames</span><span class="p">(</span><span class="n">df_2018</span><span class="p">)</span>
+<span class="nf">colnames</span><span class="p">(</span><span class="n">df_2019</span><span class="p">)</span>
+<span class="nf">colnames</span><span class="p">(</span><span class="n">df_2021</span><span class="p">)</span>
+
+<span class="c1">#&#39; See what columns are absent across the various data frames</span>
+<span class="n">a</span> <span class="o">&lt;-</span> <span class="nf">names</span><span class="p">(</span><span class="n">df_2018</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">&lt;-</span> <span class="nf">names</span><span class="p">(</span><span class="n">df_2019</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">&lt;-</span> <span class="nf">names</span><span class="p">(</span><span class="n">df_2021</span><span class="p">)</span>
+
+<span class="nf">setdiff</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="nf">setdiff</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+<span class="nf">setdiff</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+<span class="nf">setdiff</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+<span class="nf">setdiff</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+<span class="nf">setdiff</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+<span class="c1">#&#39; Remove columns not shared in common and rename colnames</span>
+
+<span class="n">df_2018</span> <span class="o">&lt;-</span> <span class="n">df_2018</span> <span class="o">%&gt;%</span> 
+  <span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="n">Sample.Temperature...C.</span><span class="p">,</span><span class="o">-</span><span class="n">Urea..µg.N.L.</span><span class="p">,</span><span class="o">-</span><span class="n">Dissolved.Organic.Carbon..mg.L.</span><span class="p">)</span> <span class="o">%&gt;%</span> 
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Date</span> <span class="o">=</span> <span class="nf">mdy</span><span class="p">(</span><span class="n">Date</span><span class="p">))</span>
+
+<span class="n">df_2019</span> <span class="o">&lt;-</span> <span class="n">df_2019</span> <span class="o">%&gt;%</span> 
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Date</span> <span class="o">=</span> <span class="nf">mdy</span><span class="p">(</span><span class="n">Date</span><span class="p">))</span>
+
+<span class="n">df_2021</span> <span class="o">&lt;-</span> <span class="n">df_2021</span> <span class="o">%&gt;%</span> 
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">date</span> <span class="o">=</span> <span class="nf">mdy</span><span class="p">(</span><span class="n">date</span><span class="p">))</span>
+
+<span class="nf">colnames</span><span class="p">(</span><span class="n">df_2018</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="nf">colnames</span><span class="p">(</span><span class="n">df_2021</span><span class="p">)</span>
+<span class="nf">colnames</span><span class="p">(</span><span class="n">df_2019</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="nf">colnames</span><span class="p">(</span><span class="n">df_2021</span><span class="p">)</span>
+
+<span class="c1">#&#39; Combine all data frames into a single data frame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="nf">rbind</span><span class="p">(</span><span class="n">df_2018</span><span class="p">,</span> <span class="n">df_2019</span><span class="p">,</span> <span class="n">df_2021</span><span class="p">)</span>
+
+<span class="c1">#&#39; Remove unnecessary columns, rename remaining, and create additional needed</span>
+<span class="c1">#&#39; columns. Note that as.numeric() function coerces any cell with a non-numeric</span>
+<span class="c1">#&#39; character (e.g. &quot;-1.21&quot;) to an NA.</span>
+<span class="n">df2</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">%&gt;%</span>
+  <span class="nf">select</span><span class="p">(</span>
+    <span class="o">-</span><span class="n">time</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">lat</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">lon</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">wind_speed</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">wave_height</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">sky</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">secchi_depth</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">ctd_temp</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">ctd_specific_conductivity</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">ctd_beam_attenuation</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">ctd_transmission</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">ctd_dissolved_oxygen</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">ctd_par</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">particulate_microcystin</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">dissolved_microcystin</span>
+    <span class="p">)</span> <span class="o">%&gt;%</span> 
+  <span class="nf">rename</span><span class="p">(</span>
+    <span class="n">Date</span> <span class="o">=</span> <span class="n">date</span><span class="p">,</span>
+    <span class="n">Site</span> <span class="o">=</span> <span class="n">station_name</span><span class="p">,</span>
+    <span class="n">StationDepth_m</span> <span class="o">=</span> <span class="n">station_depth_m</span><span class="p">,</span>
+    <span class="n">SampleDepth_m</span> <span class="o">=</span> <span class="n">sample_depth_m</span><span class="p">,</span>
+    <span class="n">SampleDepth_cat</span> <span class="o">=</span> <span class="n">sample_depth_category</span><span class="p">,</span>
+    <span class="n">Turbidity_NTU</span> <span class="o">=</span> <span class="n">turbidity</span><span class="p">,</span>
+    <span class="n">PC_ugL</span> <span class="o">=</span> <span class="n">extracted_phycocyanin</span><span class="p">,</span>
+    <span class="n">CHLA_ugL</span> <span class="o">=</span> <span class="n">extracted_chla</span><span class="p">,</span>
+    <span class="n">TP_ugL</span> <span class="o">=</span> <span class="n">total_p</span><span class="p">,</span>
+    <span class="n">TDP_ugL</span> <span class="o">=</span> <span class="n">total_dissolved_p</span><span class="p">,</span>
+    <span class="n">SRP_ugL</span> <span class="o">=</span> <span class="n">soluble_reactive_p</span><span class="p">,</span>
+    <span class="n">Ammonia_ugL</span> <span class="o">=</span> <span class="n">ammonia</span><span class="p">,</span>
+    <span class="n">NitrateAndNitrite_mgL</span> <span class="o">=</span> <span class="n">nitrate_nitrite</span><span class="p">,</span>
+    <span class="n">POC_mgL</span> <span class="o">=</span> <span class="n">particulate_organic_c</span><span class="p">,</span>
+    <span class="n">PON_mgL</span> <span class="o">=</span> <span class="n">particulate_organic_n</span><span class="p">,</span>
+    <span class="n">CDOM_400nmABS</span> <span class="o">=</span> <span class="n">cdom</span><span class="p">,</span>
+    <span class="n">TSS_mgL</span> <span class="o">=</span> <span class="n">tss</span><span class="p">,</span>
+    <span class="n">VSS_mgL</span> <span class="o">=</span> <span class="n">vss</span>
+    <span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">mutate</span><span class="p">(</span>
+    <span class="n">Date</span> <span class="o">=</span> <span class="nf">as.Date</span><span class="p">(</span><span class="n">Date</span><span class="p">,</span> <span class="n">format</span> <span class="o">=</span> <span class="s">&#39;%Y-%m-%d&#39;</span><span class="p">),</span>
+    <span class="n">StationDepth_m</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">StationDepth_m</span><span class="p">),</span>
+    <span class="n">SampleDepth_m</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">SampleDepth_m</span><span class="p">),</span>
+    <span class="n">Turbidity_NTU</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">Turbidity_NTU</span><span class="p">),</span>
+    <span class="n">PC_ugL</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">PC_ugL</span><span class="p">),</span>
+    <span class="n">CHLA_ugL</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">CHLA_ugL</span><span class="p">),</span>
+    <span class="n">TP_ugL</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">TP_ugL</span><span class="p">),</span>
+    <span class="n">TDP_ugL</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">TDP_ugL</span><span class="p">),</span>
+    <span class="n">SRP_ugL</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">SRP_ugL</span><span class="p">),</span>
+    <span class="n">Ammonia_ugL</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">Ammonia_ugL</span><span class="p">),</span>
+    <span class="n">NitrateAndNitrite_mgL</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">NitrateAndNitrite_mgL</span><span class="p">),</span>
+    <span class="n">POC_mgL</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">POC_mgL</span><span class="p">),</span>
+    <span class="n">PON_mgL</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">PON_mgL</span><span class="p">),</span>
+    <span class="n">CDOM_400nmABS</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">CDOM_400nmABS</span><span class="p">),</span>
+    <span class="n">TSS_mgL</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">TSS_mgL</span><span class="p">),</span>
+    <span class="n">VSS_mgL</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">VSS_mgL</span><span class="p">)</span>
+    <span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="c1">#&#39; For columns that have bdls entered as &quot;&lt;XXXX&quot; or &quot;bdl&quot;, R interprets</span>
+  <span class="c1">#&#39; as string instead of numeric, so remove &quot;&lt;&quot; symbol from those entries,</span>
+  <span class="c1">#&#39; then convert entire columns to numeric objects.The result is a data</span>
+  <span class="c1">#&#39; frame where entries below limit of detection (LOD) are set equal to that LOD.</span>
+  <span class="c1">#&#39; For VSS, there is no recorded LOD, so &quot;bdl&quot; entries are set to NA.</span>
+  <span class="nf">mutate</span><span class="p">(</span>
+    <span class="n">Date</span> <span class="o">=</span> <span class="nf">ymd</span><span class="p">(</span><span class="n">Date</span><span class="p">),</span>
+    <span class="n">TDP_ugL</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="nf">gsub</span><span class="p">(</span><span class="s">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">TDP_ugL</span><span class="p">)),</span>
+    <span class="n">SRP_ugL</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="nf">gsub</span><span class="p">(</span><span class="s">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">SRP_ugL</span><span class="p">)),</span>
+    <span class="n">Ammonia_ugL</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="nf">gsub</span><span class="p">(</span><span class="s">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">Ammonia_ugL</span><span class="p">)),</span>
+    <span class="n">NitrateAndNitrite_mgL</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="nf">gsub</span><span class="p">(</span><span class="s">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">NitrateAndNitrite_mgL</span><span class="p">)),</span>
+    <span class="n">VSS_mgL</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="nf">gsub</span><span class="p">(</span><span class="s">&quot;bdl&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">VSS_mgL</span><span class="p">))</span>
+    <span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">mutate</span><span class="p">(</span>
+    <span class="n">JulianDate_DDD</span> <span class="o">=</span> <span class="nf">yday</span><span class="p">(</span><span class="n">Date</span><span class="p">),</span>
+    <span class="n">PP_ugL</span> <span class="o">=</span> <span class="n">TP_ugL</span> <span class="o">-</span> <span class="n">TDP_ugL</span>
+    <span class="p">)</span> <span class="o">%&gt;%</span> 
+  <span class="nf">filter</span><span class="p">(</span>
+    <span class="n">SampleDepth_cat</span> <span class="o">==</span> <span class="s">&#39;Surface&#39;</span><span class="p">,</span>
+    <span class="n">Site</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&#39;WE2&#39;</span><span class="p">,</span> <span class="s">&#39;WE4&#39;</span><span class="p">,</span> <span class="s">&#39;WE6&#39;</span><span class="p">,</span> <span class="s">&#39;WE8&#39;</span><span class="p">,</span> <span class="s">&#39;WE9&#39;</span><span class="p">,</span> <span class="s">&#39;WE12&#39;</span><span class="p">,</span> <span class="s">&#39;WE13&#39;</span><span class="p">,</span> <span class="s">&#39;WE14&#39;</span><span class="p">,</span> <span class="s">&#39;WE15&#39;</span><span class="p">,</span> <span class="s">&#39;WE16&#39;</span><span class="p">),</span>
+    <span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">select</span><span class="p">(</span>
+    <span class="o">-</span><span class="n">SampleDepth_cat</span>
+    <span class="p">)</span>
+
+<span class="c1">#&#39; Add leading 0 to stations less than 10 (e.g. WE2 becomes WE02)</span>
+<span class="n">df3</span> <span class="o">&lt;-</span> <span class="n">df2</span> <span class="o">%&gt;%</span> 
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Site</span> <span class="o">=</span> <span class="nf">gsub</span><span class="p">(</span><span class="s">&#39;(WE)(\\d{1})$&#39;</span><span class="p">,</span> <span class="s">&#39;WE0\\2&#39;</span><span class="p">,</span> <span class="n">Site</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><ol class=list-inline>
+	<li>'Date'</li>
+	<li>'Site'</li>
+	<li>'Station.Depth..m.'</li>
+	<li>'Sample.Depth..m.'</li>
+	<li>'Sample.Depth..category.'</li>
+	<li>'Local.Time..Eastern.Time.Zone.'</li>
+	<li>'Latitude..decimal.deg.'</li>
+	<li>'Longitude..decimal.deg.'</li>
+	<li>'Wind.speed..knots.'</li>
+	<li>'Wave.Height..ft.'</li>
+	<li>'Sky'</li>
+	<li>'Secchi.Depth..m.'</li>
+	<li>'Sample.Temperature...C.'</li>
+	<li>'CTD.Temperature...C.'</li>
+	<li>'CTD.Specific.Conductivity..µS.cm.'</li>
+	<li>'CTD.Beam.Attenuation..m.1.'</li>
+	<li>'CTD.Tramission....'</li>
+	<li>'CTD.Dissolved.Oxygen..mg.L.'</li>
+	<li>'CTD.Photosynthetically.Active.Radiation..µE.m2.s.'</li>
+	<li>'Turbidity..NTU.'</li>
+	<li>'Particulate.Microcystin..µg.L.'</li>
+	<li>'Dissolved.Microcystin..µg.L.'</li>
+	<li>'Extracted.Phycocyanin..µg.L.'</li>
+	<li>'Extracted.Chlorophyll.a..µg.L.'</li>
+	<li>'Total.Phosphorus..µg.P.L.'</li>
+	<li>'Total.Dissolved.Phosphorus..µg.P.L.'</li>
+	<li>'Soluble.Reactive.Phosphorus..µg.P.L.'</li>
+	<li>'Ammonia..µg.N.L.'</li>
+	<li>'Nitrate...Nitrite..mg.N.L.'</li>
+	<li>'Urea..µg.N.L.'</li>
+	<li>'Particulate.Organic.Carbon..mg.L.'</li>
+	<li>'Particulate.Organic.Nitrogen..mg.L.'</li>
+	<li>'Dissolved.Organic.Carbon..mg.L.'</li>
+	<li>'Colored.Dissolved.Organic.Material.absorbance..m.1..at.400nm'</li>
+	<li>'Total.Suspended.Solids..mg.L.'</li>
+	<li>'Volatile.Suspended.Solids..mg.L.'</li>
+</ol>
+</div><div class="output text_html"><ol class=list-inline>
+	<li>'Date'</li>
+	<li>'Site'</li>
+	<li>'Station.Depth..m.'</li>
+	<li>'Sample.Depth..m.'</li>
+	<li>'Sample.Depth..category.'</li>
+	<li>'Local.Time..Eastern.Time.Zone.'</li>
+	<li>'Latitude..decimal.deg.'</li>
+	<li>'Longitude..decimal.deg.'</li>
+	<li>'Wind.speed..knots.'</li>
+	<li>'Wave.Height..ft.'</li>
+	<li>'Sky'</li>
+	<li>'Secchi.Depth..m.'</li>
+	<li>'CTD.Temperature...C.'</li>
+	<li>'CTD.Specific.Conductivity..µS.cm.'</li>
+	<li>'CTD.Beam.Attenuation..m.1.'</li>
+	<li>'CTD.Tramission....'</li>
+	<li>'CTD.Dissolved.Oxygen..mg.L.'</li>
+	<li>'CTD.Photosynthetically.Active.Radiation..µE.m2.s.'</li>
+	<li>'Turbidity..NTU.'</li>
+	<li>'Particulate.Microcystin..µg.L.'</li>
+	<li>'Dissolved.Microcystin..µg.L.'</li>
+	<li>'Extracted.Phycocyanin..µg.L.'</li>
+	<li>'Extracted.Chlorophyll.a..µg.L.'</li>
+	<li>'Total.Phosphorus..µg.P.L.'</li>
+	<li>'Total.Dissolved.Phosphorus..µg.P.L.'</li>
+	<li>'Soluble.Reactive.Phosphorus..µg.P.L.'</li>
+	<li>'Ammonia..µg.N.L.'</li>
+	<li>'Nitrate...Nitrite..mg.N.L.'</li>
+	<li>'Particulate.Organic.Carbon..mg.L.'</li>
+	<li>'Particulate.Organic.Nitrogen..mg.L.'</li>
+	<li>'Colored.Dissolved.Organic.Material.absorbance..m.1..at.400nm'</li>
+	<li>'Total.Suspended.Solids..mg.L.'</li>
+	<li>'Volatile.Suspended.Solids..mg.L.'</li>
+</ol>
+</div><div class="output text_html"><ol class=list-inline>
+	<li>'date'</li>
+	<li>'station_name'</li>
+	<li>'station_depth_m'</li>
+	<li>'sample_depth_m'</li>
+	<li>'sample_depth_category'</li>
+	<li>'time'</li>
+	<li>'lat'</li>
+	<li>'lon'</li>
+	<li>'wind_speed'</li>
+	<li>'wave_height'</li>
+	<li>'sky'</li>
+	<li>'secchi_depth'</li>
+	<li>'ctd_temp'</li>
+	<li>'ctd_specific_conductivity'</li>
+	<li>'ctd_beam_attenuation'</li>
+	<li>'ctd_transmission'</li>
+	<li>'ctd_dissolved_oxygen'</li>
+	<li>'ctd_par'</li>
+	<li>'turbidity'</li>
+	<li>'particulate_microcystin'</li>
+	<li>'dissolved_microcystin'</li>
+	<li>'extracted_phycocyanin'</li>
+	<li>'extracted_chla'</li>
+	<li>'total_p'</li>
+	<li>'total_dissolved_p'</li>
+	<li>'soluble_reactive_p'</li>
+	<li>'ammonia'</li>
+	<li>'nitrate_nitrite'</li>
+	<li>'particulate_organic_c'</li>
+	<li>'particulate_organic_n'</li>
+	<li>'cdom'</li>
+	<li>'tss'</li>
+	<li>'vss'</li>
+</ol>
+</div><div class="output text_html"><ol class=list-inline>
+	<li>'Sample.Temperature...C.'</li>
+	<li>'Urea..µg.N.L.'</li>
+	<li>'Dissolved.Organic.Carbon..mg.L.'</li>
+</ol>
+</div><div class="output text_html"><ol class=list-inline>
+	<li>'Date'</li>
+	<li>'Site'</li>
+	<li>'Station.Depth..m.'</li>
+	<li>'Sample.Depth..m.'</li>
+	<li>'Sample.Depth..category.'</li>
+	<li>'Local.Time..Eastern.Time.Zone.'</li>
+	<li>'Latitude..decimal.deg.'</li>
+	<li>'Longitude..decimal.deg.'</li>
+	<li>'Wind.speed..knots.'</li>
+	<li>'Wave.Height..ft.'</li>
+	<li>'Sky'</li>
+	<li>'Secchi.Depth..m.'</li>
+	<li>'Sample.Temperature...C.'</li>
+	<li>'CTD.Temperature...C.'</li>
+	<li>'CTD.Specific.Conductivity..µS.cm.'</li>
+	<li>'CTD.Beam.Attenuation..m.1.'</li>
+	<li>'CTD.Tramission....'</li>
+	<li>'CTD.Dissolved.Oxygen..mg.L.'</li>
+	<li>'CTD.Photosynthetically.Active.Radiation..µE.m2.s.'</li>
+	<li>'Turbidity..NTU.'</li>
+	<li>'Particulate.Microcystin..µg.L.'</li>
+	<li>'Dissolved.Microcystin..µg.L.'</li>
+	<li>'Extracted.Phycocyanin..µg.L.'</li>
+	<li>'Extracted.Chlorophyll.a..µg.L.'</li>
+	<li>'Total.Phosphorus..µg.P.L.'</li>
+	<li>'Total.Dissolved.Phosphorus..µg.P.L.'</li>
+	<li>'Soluble.Reactive.Phosphorus..µg.P.L.'</li>
+	<li>'Ammonia..µg.N.L.'</li>
+	<li>'Nitrate...Nitrite..mg.N.L.'</li>
+	<li>'Urea..µg.N.L.'</li>
+	<li>'Particulate.Organic.Carbon..mg.L.'</li>
+	<li>'Particulate.Organic.Nitrogen..mg.L.'</li>
+	<li>'Dissolved.Organic.Carbon..mg.L.'</li>
+	<li>'Colored.Dissolved.Organic.Material.absorbance..m.1..at.400nm'</li>
+	<li>'Total.Suspended.Solids..mg.L.'</li>
+	<li>'Volatile.Suspended.Solids..mg.L.'</li>
+</ol>
+</div><div class="output text_html"></div><div class="output text_html"><ol class=list-inline>
+	<li>'Date'</li>
+	<li>'Site'</li>
+	<li>'Station.Depth..m.'</li>
+	<li>'Sample.Depth..m.'</li>
+	<li>'Sample.Depth..category.'</li>
+	<li>'Local.Time..Eastern.Time.Zone.'</li>
+	<li>'Latitude..decimal.deg.'</li>
+	<li>'Longitude..decimal.deg.'</li>
+	<li>'Wind.speed..knots.'</li>
+	<li>'Wave.Height..ft.'</li>
+	<li>'Sky'</li>
+	<li>'Secchi.Depth..m.'</li>
+	<li>'CTD.Temperature...C.'</li>
+	<li>'CTD.Specific.Conductivity..µS.cm.'</li>
+	<li>'CTD.Beam.Attenuation..m.1.'</li>
+	<li>'CTD.Tramission....'</li>
+	<li>'CTD.Dissolved.Oxygen..mg.L.'</li>
+	<li>'CTD.Photosynthetically.Active.Radiation..µE.m2.s.'</li>
+	<li>'Turbidity..NTU.'</li>
+	<li>'Particulate.Microcystin..µg.L.'</li>
+	<li>'Dissolved.Microcystin..µg.L.'</li>
+	<li>'Extracted.Phycocyanin..µg.L.'</li>
+	<li>'Extracted.Chlorophyll.a..µg.L.'</li>
+	<li>'Total.Phosphorus..µg.P.L.'</li>
+	<li>'Total.Dissolved.Phosphorus..µg.P.L.'</li>
+	<li>'Soluble.Reactive.Phosphorus..µg.P.L.'</li>
+	<li>'Ammonia..µg.N.L.'</li>
+	<li>'Nitrate...Nitrite..mg.N.L.'</li>
+	<li>'Particulate.Organic.Carbon..mg.L.'</li>
+	<li>'Particulate.Organic.Nitrogen..mg.L.'</li>
+	<li>'Colored.Dissolved.Organic.Material.absorbance..m.1..at.400nm'</li>
+	<li>'Total.Suspended.Solids..mg.L.'</li>
+	<li>'Volatile.Suspended.Solids..mg.L.'</li>
+</ol>
+</div><div class="output text_html"><ol class=list-inline>
+	<li>'date'</li>
+	<li>'station_name'</li>
+	<li>'station_depth_m'</li>
+	<li>'sample_depth_m'</li>
+	<li>'sample_depth_category'</li>
+	<li>'time'</li>
+	<li>'lat'</li>
+	<li>'lon'</li>
+	<li>'wind_speed'</li>
+	<li>'wave_height'</li>
+	<li>'sky'</li>
+	<li>'secchi_depth'</li>
+	<li>'ctd_temp'</li>
+	<li>'ctd_specific_conductivity'</li>
+	<li>'ctd_beam_attenuation'</li>
+	<li>'ctd_transmission'</li>
+	<li>'ctd_dissolved_oxygen'</li>
+	<li>'ctd_par'</li>
+	<li>'turbidity'</li>
+	<li>'particulate_microcystin'</li>
+	<li>'dissolved_microcystin'</li>
+	<li>'extracted_phycocyanin'</li>
+	<li>'extracted_chla'</li>
+	<li>'total_p'</li>
+	<li>'total_dissolved_p'</li>
+	<li>'soluble_reactive_p'</li>
+	<li>'ammonia'</li>
+	<li>'nitrate_nitrite'</li>
+	<li>'particulate_organic_c'</li>
+	<li>'particulate_organic_n'</li>
+	<li>'cdom'</li>
+	<li>'tss'</li>
+	<li>'vss'</li>
+</ol>
+</div><div class="output text_html"><ol class=list-inline>
+	<li>'date'</li>
+	<li>'station_name'</li>
+	<li>'station_depth_m'</li>
+	<li>'sample_depth_m'</li>
+	<li>'sample_depth_category'</li>
+	<li>'time'</li>
+	<li>'lat'</li>
+	<li>'lon'</li>
+	<li>'wind_speed'</li>
+	<li>'wave_height'</li>
+	<li>'sky'</li>
+	<li>'secchi_depth'</li>
+	<li>'ctd_temp'</li>
+	<li>'ctd_specific_conductivity'</li>
+	<li>'ctd_beam_attenuation'</li>
+	<li>'ctd_transmission'</li>
+	<li>'ctd_dissolved_oxygen'</li>
+	<li>'ctd_par'</li>
+	<li>'turbidity'</li>
+	<li>'particulate_microcystin'</li>
+	<li>'dissolved_microcystin'</li>
+	<li>'extracted_phycocyanin'</li>
+	<li>'extracted_chla'</li>
+	<li>'total_p'</li>
+	<li>'total_dissolved_p'</li>
+	<li>'soluble_reactive_p'</li>
+	<li>'ammonia'</li>
+	<li>'nitrate_nitrite'</li>
+	<li>'particulate_organic_c'</li>
+	<li>'particulate_organic_n'</li>
+	<li>'cdom'</li>
+	<li>'tss'</li>
+	<li>'vss'</li>
+</ol>
+</div></div>
+</div>
+</section>
+<section id="save-dataframe-as-csv-for-use-downstream">
+<h2>Save Dataframe as CSV for Use Downstream<a class="headerlink" href="#save-dataframe-as-csv-for-use-downstream" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">write.csv</span><span class="p">(</span><span class="n">df3</span><span class="p">,</span>
+          <span class="n">file</span> <span class="o">=</span> <span class="s">&#39;data/clean_df.csv&#39;</span><span class="p">,</span>
+          <span class="n">row.names</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            kernelName: "ir",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="access-fvcom-from-thredds.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Access FVCOM model output from THREDDs Server</p>
+        </div>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By NOAA Great Lakes Environmental Research Laboratory<br/>
+  
+    <div class="extra_footer">
+      <div>
+    <a href="https://www.glerl.noaa.gov/home/contactus.html" target="_blank">Contact Us</a>
+    <br>
+    <p>
+    NOAA Great Lakes Environmental Research Laboratory<br>
+    4840 S. State Road<br>
+    Ann, Arbor MI 48108<br>
+    (734) 741-2235<br>
+    </p>
+</div>
+
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
