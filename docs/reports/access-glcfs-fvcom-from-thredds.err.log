@@ -21,30 +21,26 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-# Set the URL
-url = 'https://www.glerl.noaa.gov/thredds/dodsC/glcfs/erie/nowcast/041712_0001.nc'
-
-# Load it via OPeNDAP
-nc = netCDF4.Dataset(url)
-
-# Query the variables
-for var in nc.variables.keys() :
-    print(var)
+for i in range(len(obs)):
+    # Find depth in meters of center of sigma layer
+    depths=nc.variables['siglay'][:,obs['NODE-ID'][i]] * nc.variables['h'][obs['NODE-ID'][i]]
+    z[:,i] = nc['temp'][0,:,obs['NODE-ID'][i]]
 ------------------
 
 [1;31m---------------------------------------------------------------------------[0m
-[1;31mOSError[0m                                   Traceback (most recent call last)
-Cell [1;32mIn[2], line 5[0m
-[0;32m      2[0m url [38;5;241m=[39m [38;5;124m'[39m[38;5;124mhttps://www.glerl.noaa.gov/thredds/dodsC/glcfs/erie/nowcast/041712_0001.nc[39m[38;5;124m'[39m
-[0;32m      4[0m [38;5;66;03m# Load it via OPeNDAP[39;00m
-[1;32m----> 5[0m nc [38;5;241m=[39m [43mnetCDF4[49m[38;5;241;43m.[39;49m[43mDataset[49m[43m([49m[43murl[49m[43m)[49m
-[0;32m      7[0m [38;5;66;03m# Query the variables[39;00m
-[0;32m      8[0m [38;5;28;01mfor[39;00m var [38;5;129;01min[39;00m nc[38;5;241m.[39mvariables[38;5;241m.[39mkeys() :
+[1;31mRuntimeError[0m                              Traceback (most recent call last)
+Cell [1;32mIn[19], line 4[0m
+[0;32m      1[0m [38;5;28;01mfor[39;00m i [38;5;129;01min[39;00m [38;5;28mrange[39m([38;5;28mlen[39m(obs)):
+[0;32m      2[0m     [38;5;66;03m# Find depth in meters of center of sigma layer[39;00m
+[0;32m      3[0m     depths[38;5;241m=[39mnc[38;5;241m.[39mvariables[[38;5;124m'[39m[38;5;124msiglay[39m[38;5;124m'[39m][:,obs[[38;5;124m'[39m[38;5;124mNODE-ID[39m[38;5;124m'[39m][i]] [38;5;241m*[39m nc[38;5;241m.[39mvariables[[38;5;124m'[39m[38;5;124mh[39m[38;5;124m'[39m][obs[[38;5;124m'[39m[38;5;124mNODE-ID[39m[38;5;124m'[39m][i]]
+[1;32m----> 4[0m     z[:,i] [38;5;241m=[39m [43mnc[49m[43m[[49m[38;5;124;43m'[39;49m[38;5;124;43mtemp[39;49m[38;5;124;43m'[39;49m[43m][49m[43m[[49m[38;5;241;43m0[39;49m[43m,[49m[43m:[49m[43m,[49m[43mobs[49m[43m[[49m[38;5;124;43m'[39;49m[38;5;124;43mNODE-ID[39;49m[38;5;124;43m'[39;49m[43m][49m[43m[[49m[43mi[49m[43m][49m[43m][49m
 
-File [1;32msrc\netCDF4\_netCDF4.pyx:2449[0m, in [0;36mnetCDF4._netCDF4.Dataset.__init__[1;34m()[0m
+File [1;32msrc\netCDF4\_netCDF4.pyx:4940[0m, in [0;36mnetCDF4._netCDF4.Variable.__getitem__[1;34m()[0m
 
-File [1;32msrc\netCDF4\_netCDF4.pyx:2012[0m, in [0;36mnetCDF4._netCDF4._ensure_nc_success[1;34m()[0m
+File [1;32msrc\netCDF4\_netCDF4.pyx:5898[0m, in [0;36mnetCDF4._netCDF4.Variable._get[1;34m()[0m
 
-[1;31mOSError[0m: [Errno -68] NetCDF: I/O failure: 'https://www.glerl.noaa.gov/thredds/dodsC/glcfs/erie/nowcast/041712_0001.nc'
-OSError: [Errno -68] NetCDF: I/O failure: 'https://www.glerl.noaa.gov/thredds/dodsC/glcfs/erie/nowcast/041712_0001.nc'
+File [1;32msrc\netCDF4\_netCDF4.pyx:2014[0m, in [0;36mnetCDF4._netCDF4._ensure_nc_success[1;34m()[0m
+
+[1;31mRuntimeError[0m: NetCDF: Authorization failure
+RuntimeError: NetCDF: Authorization failure
 

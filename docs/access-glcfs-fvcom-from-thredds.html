@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Access FVCOM model output from THREDDS Server &#8212; NOAA GLERL Code Gallery</title>
+    <title>Access GLCFS model output from THREDDS Server &#8212; NOAA GLERL Code Gallery</title>
   
   
   
@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Use R to retrieve data from NCEI" href="R-NCEI-data-retrieval.html" />
-    <link rel="prev" title="Here’s my sample title" href="mymarkdownfile.html" />
+    <link rel="prev" title="NOAA GLERL Code Gallery Start Page" href="intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
   </head>
@@ -155,13 +155,9 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="mymarkdownfile.html">Here’s my sample title</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Access</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Access</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Access FVCOM model output from THREDDS Server</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Access GLCFS model output from THREDDS Server</a></li>
 <li class="toctree-l1"><a class="reference internal" href="R-NCEI-data-retrieval.html">Use R to retrieve data from NCEI</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Other Resources</span></p>
@@ -350,7 +346,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Access FVCOM model output from THREDDS Server</h1>
+    <h1>Access GLCFS model output from THREDDS Server</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -379,14 +375,16 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="access-fvcom-model-output-from-thredds-server">
-<h1>Access FVCOM model output from THREDDS Server<a class="headerlink" href="#access-fvcom-model-output-from-thredds-server" title="Permalink to this headline">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="access-glcfs-model-output-from-thredds-server">
+<h1>Access GLCFS model output from THREDDS Server<a class="headerlink" href="#access-glcfs-model-output-from-thredds-server" title="Permalink to this headline">#</a></h1>
 <p>This notebook is help users get started using FVCOM output from the <a class="reference external" href="https://www.glerl.noaa.gov/thredds/catalog/catalog.html">GLERL THREDDS Server</a>. This example includes data from the Great Lakes Coastal Forecasting System (<a class="reference external" href="https://www.glerl.noaa.gov/res/glcfs/">GLCFS</a>). Learn more about <a class="reference external" href="https://www.glerl.noaa.gov/res/Programs/ipemf/GLCFS_nextgen.html">GLCFS here</a> and how to access both experimental and operational data on the <a class="reference external" href="https://www.glerl.noaa.gov/res/Programs/ipemf/glcfs_data_access.html">Data Access page here</a>.</p>
 <p>The Python modules used in this example are fairly common. We also provide examples using the module <a class="reference external" href="https://github.com/pmlmodelling/pyfvcom">PyFVCOM</a>.  More examples of PyFVCOM can be found <a class="reference external" href="https://notebook.community/pwcazenave/PyFVCOM/examples/pyfvcom_plot_example">here</a>.</p>
 <p>Thank you those whose code we based this notebook from including Rich Signell USGS <a class="reference external" href="https://nbviewer.org/github/rsignell-usgs/ipython-notebooks/blob/master/files/FVCOM_depth_and_velocity.ipynb">avavilable here</a> and Tristan Salles <a class="reference external" href="https://tristansalles.github.io/Coast/queryocean/oceanforecast.html">available here</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.tri</span> <span class="k">as</span> <span class="nn">Tri</span>
@@ -411,7 +409,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set the URL</span>
-<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://www.glerl.noaa.gov/thredds/dodsC/glcfs/erie/nowcast/041712_0001.nc&#39;</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://www.glerl.noaa.gov/thredds/dodsC/glcfs/erie/nowcast/042512_0001.nc&#39;</span>
 
 <span class="c1"># Load it via OPeNDAP</span>
 <span class="n">nc</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
@@ -423,20 +421,75 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">OSError</span><span class="g g-Whitespace">                                   </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://www.glerl.noaa.gov/thredds/dodsC/glcfs/erie/nowcast/041712_0001.nc&#39;</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># Load it via OPeNDAP</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">nc</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1"># Query the variables</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="p">:</span>
-
-<span class="nn">File src\netCDF4\_netCDF4.pyx:2449,</span> in <span class="ni">netCDF4._netCDF4.Dataset.__init__</span><span class="nt">()</span>
-
-<span class="nn">File src\netCDF4\_netCDF4.pyx:2012,</span> in <span class="ni">netCDF4._netCDF4._ensure_nc_success</span><span class="nt">()</span>
-
-<span class="ne">OSError</span>: [Errno -68] NetCDF: I/O failure: &#39;https://www.glerl.noaa.gov/thredds/dodsC/glcfs/erie/nowcast/041712_0001.nc&#39;
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nprocs
+partition
+x
+y
+lon
+lat
+xc
+yc
+lonc
+latc
+siglay
+siglev
+siglay_center
+siglev_center
+h_center
+h
+nv
+iint
+time
+Itime
+Itime2
+Times
+zeta
+nbe
+ntsn
+nbsn
+ntve
+nbve
+a1u
+a2u
+aw0
+awx
+awy
+art2
+art1
+u
+v
+tauc
+omega
+ww
+ua
+va
+temp
+salinity
+viscofm
+viscofh
+km
+kh
+kq
+q2
+q2l
+l
+short_wave
+net_heat_flux
+sensible_heat_flux
+latent_heat_flux
+long_wave
+uwind_speed
+vwind_speed
+wet_nodes
+wet_cells
+wet_nodes_prev_int
+wet_cells_prev_int
+wet_cells_prev_ext
+aice
+vice
+tsfc
+uuice
+vvice
 </pre></div>
 </div>
 </div>
@@ -445,6 +498,23 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># take a look at the &quot;metadata&quot; for the variable &quot;u&quot;</span>
 <span class="nb">print</span> <span class="p">(</span><span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;netCDF4._netCDF4.Variable&#39;&gt;
+float32 u(time, siglay, nele)
+    long_name: Eastward Water Velocity
+    standard_name: eastward_sea_water_velocity
+    units: meters s-1
+    grid: fvcom_grid
+    type: data
+    coordinates: time siglay latc lonc
+    mesh: fvcom_mesh
+    location: face
+unlimited dimensions: time
+current shape = (12, 20, 11509)
+filling off
 </pre></div>
 </div>
 </div>
@@ -457,12 +527,17 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enter your specific date &amp; time in UTC</span>
 <span class="c1"># This must correspond to the file you selected in the &#39;URL&#39;</span>
 <span class="c1"># variable above</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># year,month,day,hour,minute,second</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># year,month,day,hour,minute,second</span>
 
 <span class="c1"># Get desired time step  </span>
 <span class="n">time_var</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
 <span class="n">itime</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">date2index</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">time_var</span><span class="p">,</span><span class="n">select</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">)</span> 
 <span class="nb">print</span><span class="p">(</span><span class="n">itime</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>11 2023-04-25 12:00:00
 </pre></div>
 </div>
 </div>
@@ -476,6 +551,11 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-Apr-25 12:00
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 <section id="get-specific-data-from-fvcom-outputs">
@@ -486,12 +566,28 @@ document.write(`
 <span class="n">lat</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">][:]</span>
 <span class="n">lon</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][:]</span>
 
-<span class="c1"># Get lon,lat coordinates for cell centers (depth)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#this makes a three second pause in the code so THREDDS server has time to respond</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get lon,lat coordinates for cell centers (depth)</span>
 <span class="n">latc</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;latc&#39;</span><span class="p">][:]</span>
 <span class="n">lonc</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;lonc&#39;</span><span class="p">][:]</span>
 
-<span class="c1"># Get depth</span>
-<span class="n">h</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">][:]</span>  <span class="c1"># depth</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#this makes a three second pause in the code so THREDDS server has time to respond</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get depth</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">][:]</span>
+
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#this makes a three second pause in the code so THREDDS server has time to respond</span>
 </pre></div>
 </div>
 </div>
@@ -500,6 +596,8 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get Connectivity array</span>
 <span class="n">nv</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;nv&#39;</span><span class="p">][:]</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="mi">1</span> 
+
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#this makes a three second pause in the code so THREDDS server has time to respond</span>
 </pre></div>
 </div>
 </div>
@@ -508,6 +606,8 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Take FVCOM Delaunay grid</span>
 <span class="n">tri</span> <span class="o">=</span> <span class="n">Tri</span><span class="o">.</span><span class="n">Triangulation</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span><span class="n">lat</span><span class="p">,</span><span class="n">triangles</span><span class="o">=</span><span class="n">nv</span><span class="p">)</span>
+
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#this makes a three second pause in the code so THREDDS server has time to respond</span>
 </pre></div>
 </div>
 </div>
@@ -588,6 +688,9 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<img alt="_images/069c04fd7cce5ff95ec87b1d2d8abc9a8c522d64277383608d5fc931714dfceb.png" src="_images/069c04fd7cce5ff95ec87b1d2d8abc9a8c522d64277383608d5fc931714dfceb.png" />
+</div>
 </div>
 </section>
 <section id="extract-temperature-profile">
@@ -607,6 +710,43 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Lat</th>
+      <th>Lon</th>
+    </tr>
+    <tr>
+      <th>Station</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Cleveland OH</th>
+      <td>41.72883</td>
+      <td>278.201503</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -620,12 +760,52 @@ document.write(`
         
     <span class="k">return</span> <span class="n">ind</span>
 
-<span class="c1"># Query to find closest NECOFS nodes to station locations</span>
+<span class="c1"># Query to find closest nodes to station locations</span>
 <span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nearxy</span><span class="p">(</span><span class="n">nc</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][:],</span><span class="n">nc</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">][:],</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lon&#39;</span><span class="p">],</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lat&#39;</span><span class="p">])</span>
 <span class="n">obs</span>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Lat</th>
+      <th>Lon</th>
+      <th>NODE-ID</th>
+    </tr>
+    <tr>
+      <th>Station</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Cleveland OH</th>
+      <td>41.72883</td>
+      <td>278.201503</td>
+      <td>2736</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -633,20 +813,74 @@ document.write(`
 <span class="c1"># At the time defined above</span>
 <span class="n">nsta</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
 <span class="n">z</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;siglay&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]),</span><span class="n">nsta</span><span class="p">))</span>
-
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsta</span><span class="p">):</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">obs</span><span class="p">)):</span>
     <span class="c1"># Find depth in meters of center of sigma layer</span>
     <span class="n">depths</span><span class="o">=</span><span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;siglay&#39;</span><span class="p">][:,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span> <span class="o">*</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">][</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
     <span class="n">z</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nc</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
-    
-    
-<span class="c1"># Make a DataFrame out of the interpolated time series at each location</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">19</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">obs</span><span class="p">)):</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="c1"># Find depth in meters of center of sigma layer</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">depths</span><span class="o">=</span><span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;siglay&#39;</span><span class="p">][:,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span> <span class="o">*</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">][</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
+<span class="ne">----&gt; </span><span class="mi">4</span>     <span class="n">z</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nc</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
+
+<span class="nn">File src\netCDF4\_netCDF4.pyx:4940,</span> in <span class="ni">netCDF4._netCDF4.Variable.__getitem__</span><span class="nt">()</span>
+
+<span class="nn">File src\netCDF4\_netCDF4.pyx:5898,</span> in <span class="ni">netCDF4._netCDF4.Variable._get</span><span class="nt">()</span>
+
+<span class="nn">File src\netCDF4\_netCDF4.pyx:2014,</span> in <span class="ni">netCDF4._netCDF4._ensure_nc_success</span><span class="nt">()</span>
+
+<span class="ne">RuntimeError</span>: NetCDF: Authorization failure
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make a DataFrame out of the interpolated time series at each location</span>
 <span class="n">zvals</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">z</span><span class="p">[:],</span><span class="n">index</span><span class="o">=</span><span class="n">depths</span><span class="p">)</span>
 <span class="n">zvals</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;depth_m&#39;</span>
 <span class="n">zvals</span><span class="o">.</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;temp_C&#39;</span><span class="p">]</span>
 
 <span class="c1"># Or print all values</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">zvals</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>              temp_C
+depth_m             
+-0.531025   5.197840
+-1.593075   5.215734
+-2.655125   5.220207
+-3.717175   5.222991
+-4.779226   5.225032
+-5.841276   5.226626
+-6.903326   5.227908
+-7.965375   5.228949
+-9.027426   5.229790
+-10.089477  5.230453
+-11.151527  5.230949
+-12.213576  5.231275
+-13.275628  5.231416
+-14.337677  5.231342
+-15.399728  5.230993
+-16.461779  5.230258
+-17.523829  5.228909
+-18.585876  5.226341
+-19.647928  5.218775
+-20.709980  5.188787
 </pre></div>
 </div>
 </div>
@@ -671,6 +905,9 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<img alt="_images/4168672e277bdcf3322f4b31c5db2784774b12c85c7ce672ec5dfbfdcd1efd04.png" src="_images/4168672e277bdcf3322f4b31c5db2784774b12c85c7ce672ec5dfbfdcd1efd04.png" />
+</div>
 </div>
 </section>
 <section id="extract-current-profile">
@@ -690,6 +927,43 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Lat</th>
+      <th>Lon</th>
+    </tr>
+    <tr>
+      <th>Station</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Cleveland OH</th>
+      <td>41.72883</td>
+      <td>278.201503</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -712,6 +986,49 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Lat</th>
+      <th>Lon</th>
+      <th>NODE-ID</th>
+      <th>NODE-ID-c</th>
+    </tr>
+    <tr>
+      <th>Station</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Cleveland OH</th>
+      <td>41.72883</td>
+      <td>278.201503</td>
+      <td>2736</td>
+      <td>5194</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -766,6 +1083,32 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                   u         v
+depth_m                       
+-0.531025   0.040028  0.026247
+-1.593075   0.032888  0.015822
+-2.655125   0.023069  0.004561
+-3.717175   0.017605 -0.000708
+-4.779226   0.013354 -0.004218
+-5.841276   0.009766 -0.006768
+-6.903326   0.006628 -0.008686
+-7.965375   0.003832 -0.010146
+-9.027426   0.001310 -0.011257
+-10.089477 -0.000983 -0.012094
+-11.151527 -0.003077 -0.012709
+-12.213576 -0.004998 -0.013142
+-13.275628 -0.006762 -0.013422
+-14.337677 -0.008385 -0.013573
+-15.399728 -0.009877 -0.013611
+-16.461779 -0.011247 -0.013546
+-17.523829 -0.012497 -0.013380
+-18.585876 -0.013619 -0.013095
+-19.647928 -0.014563 -0.012610
+-20.709980 -0.014914 -0.011373
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 </section>
@@ -802,12 +1145,12 @@ document.write(`
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="mymarkdownfile.html"
+       href="intro.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Here’s my sample title</p>
+        <p class="prev-next-title">NOAA GLERL Code Gallery Start Page</p>
       </div>
     </a>
     <a class="right-next"
