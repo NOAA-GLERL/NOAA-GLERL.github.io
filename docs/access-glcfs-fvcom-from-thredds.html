@@ -385,7 +385,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
 
 <span class="o">%</span><span class="k">matplotlib</span> inline
-<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="c1"># from pylab import *</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.tri</span> <span class="k">as</span> <span class="nn">Tri</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -394,12 +394,22 @@ document.write(`
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
 
+<span class="kn">import</span> <span class="nn">pyproj</span>
+
 
 <span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;png&#39;
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;mathtext.fontset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;cm&#39;</span>
 
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Time to sleep in seconds before each opendap call to give server time to respond </span>
+<span class="n">opendap_pause</span> <span class="o">=</span> <span class="mi">1</span> 
 </pre></div>
 </div>
 </div>
@@ -415,6 +425,7 @@ document.write(`
 <span class="n">nc</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
 <span class="c1"># Query the variables</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
 </pre></div>
@@ -496,7 +507,8 @@ vvice
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># take a look at the &quot;metadata&quot; for the variable &quot;u&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># take a look at the &quot;metadata&quot; for the variable &quot;u&quot;.</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
 <span class="nb">print</span> <span class="p">(</span><span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -525,14 +537,18 @@ filling off
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enter your specific date &amp; time in UTC</span>
-<span class="c1"># This must correspond to the file you selected in the &#39;URL&#39;</span>
+<span class="c1"># This must be contained in the file you selected in the &#39;URL&#39;</span>
 <span class="c1"># variable above</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># year,month,day,hour,minute,second</span>
+<span class="n">time_extract</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># year,month,day,hour,minute,second</span>
 
-<span class="c1"># Get desired time step  </span>
-<span class="n">time_var</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
-<span class="n">itime</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">date2index</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">time_var</span><span class="p">,</span><span class="n">select</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">)</span> 
-<span class="nb">print</span><span class="p">(</span><span class="n">itime</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+<span class="c1"># Get desired time step </span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
+<span class="n">time_var1</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;Itime&#39;</span><span class="p">]</span>
+<span class="n">time_vals</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">num2date</span><span class="p">(</span><span class="n">time_var1</span><span class="p">,</span> <span class="n">time_var1</span><span class="o">.</span><span class="n">units</span><span class="p">)</span> <span class="o">+</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;Itime2&#39;</span><span class="p">][:]</span> <span class="o">*</span> <span class="n">dt</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">milliseconds</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Get desired time step</span>
+<span class="n">itime</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">time_vals</span><span class="o">-</span><span class="n">time_extract</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">itime</span><span class="p">,</span> <span class="n">time_extract</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -544,8 +560,8 @@ filling off
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert datetime format</span>
-<span class="n">dtime</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">num2date</span><span class="p">(</span><span class="n">time_var</span><span class="p">[</span><span class="n">itime</span><span class="p">],</span><span class="n">time_var</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print extracted time</span>
+<span class="n">dtime</span> <span class="o">=</span> <span class="n">time_vals</span><span class="p">[</span><span class="n">itime</span><span class="p">]</span>
 <span class="n">daystr</span> <span class="o">=</span> <span class="n">dtime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%b-</span><span class="si">%d</span><span class="s1"> %H:%M&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">daystr</span><span class="p">)</span>
 </pre></div>
@@ -563,10 +579,11 @@ filling off
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get lon,lat coordinates for nodes (depth)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
 <span class="n">lat</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">][:]</span>
-<span class="n">lon</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][:]</span>
 
-<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#this makes a three second pause in the code so THREDDS server has time to respond</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
+<span class="n">lon</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][:]</span>
 </pre></div>
 </div>
 </div>
@@ -574,10 +591,11 @@ filling off
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get lon,lat coordinates for cell centers (depth)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
 <span class="n">latc</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;latc&#39;</span><span class="p">][:]</span>
-<span class="n">lonc</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;lonc&#39;</span><span class="p">][:]</span>
 
-<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#this makes a three second pause in the code so THREDDS server has time to respond</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
+<span class="n">lonc</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;lonc&#39;</span><span class="p">][:]</span>
 </pre></div>
 </div>
 </div>
@@ -585,9 +603,8 @@ filling off
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get depth</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
 <span class="n">h</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">][:]</span>
-
-<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#this makes a three second pause in the code so THREDDS server has time to respond</span>
 </pre></div>
 </div>
 </div>
@@ -595,9 +612,8 @@ filling off
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get Connectivity array</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
 <span class="n">nv</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;nv&#39;</span><span class="p">][:]</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="mi">1</span> 
-
-<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#this makes a three second pause in the code so THREDDS server has time to respond</span>
 </pre></div>
 </div>
 </div>
@@ -605,9 +621,8 @@ filling off
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Take FVCOM Delaunay grid</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
 <span class="n">tri</span> <span class="o">=</span> <span class="n">Tri</span><span class="o">.</span><span class="n">Triangulation</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span><span class="n">lat</span><span class="p">,</span><span class="n">triangles</span><span class="o">=</span><span class="n">nv</span><span class="p">)</span>
-
-<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#this makes a three second pause in the code so THREDDS server has time to respond</span>
 </pre></div>
 </div>
 </div>
@@ -619,7 +634,11 @@ filling off
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get current at layer [0 = surface, -1 = bottom]</span>
 <span class="n">ilayer</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
 <span class="n">u</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">][</span><span class="n">itime</span><span class="p">,</span> <span class="n">ilayer</span><span class="p">,</span> <span class="p">:]</span>
+
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
 <span class="n">v</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">][</span><span class="n">itime</span><span class="p">,</span> <span class="n">ilayer</span><span class="p">,</span> <span class="p">:]</span>
 </pre></div>
 </div>
@@ -644,8 +663,9 @@ filling off
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Depth contours to plot</span>
-<span class="n">max_depth</span> <span class="o">=</span> <span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">][:]))</span> <span class="o">-</span> <span class="mi">1</span>
-<span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">max_depth</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>   
+<span class="n">contour_interval</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># meters</span>
+<span class="n">max_depth</span> <span class="o">=</span> <span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">h</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span> 
+<span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">max_depth</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">contour_interval</span><span class="p">)</span>  
 </pre></div>
 </div>
 </div>
@@ -689,7 +709,7 @@ filling off
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/069c04fd7cce5ff95ec87b1d2d8abc9a8c522d64277383608d5fc931714dfceb.png" src="_images/069c04fd7cce5ff95ec87b1d2d8abc9a8c522d64277383608d5fc931714dfceb.png" />
+<img alt="_images/f715fca5ad56eb030ed09dc2d7d96e494d3f4588af6aafd0940ee8c83aa19892.png" src="_images/f715fca5ad56eb030ed09dc2d7d96e494d3f4588af6aafd0940ee8c83aa19892.png" />
 </div>
 </div>
 </section>
@@ -705,155 +725,98 @@ filling off
 <span class="c1"># Create a Pandas DataFrame</span>
 <span class="n">obs</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()),</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;,\s*&quot;</span><span class="p">,</span><span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;Station&#39;</span><span class="p">,</span><span class="n">engine</span><span class="o">=</span><span class="s1">&#39;python&#39;</span><span class="p">)</span>
 <span class="c1"># Convert longitude coordinate</span>
-<span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lon&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">360.0</span> <span class="o">+</span> <span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lon&#39;</span><span class="p">]</span>
-<span class="n">obs</span>
+<span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lon&#39;</span><span class="p">]</span> <span class="o">%=</span> <span class="mi">360</span> 
+<span class="nb">print</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Lat</th>
-      <th>Lon</th>
-    </tr>
-    <tr>
-      <th>Station</th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Cleveland OH</th>
-      <td>41.72883</td>
-      <td>278.201503</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                   Lat         Lon
+Station                           
+Cleveland OH  41.72883  278.201503
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find the indices of the points in (x,y) closest to the points in (xi,yi)</span>
 <span class="k">def</span> <span class="nf">nearxy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">yi</span><span class="p">):</span>
+    <span class="n">proj</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="s1">&#39;+proj=aea +lat_1=42.122774 +lat_2=49.01518 +lat_0=45.568977 </span><span class="se">\</span>
+<span class="s1">    +lon_0=-84.455955 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +datum=NAD83 +units=m +no_defs&#39;</span><span class="p">)</span>
     
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">xi</span><span class="p">,</span> <span class="n">yi</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">yi</span><span class="p">))</span>
     <span class="n">ind</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xi</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xi</span><span class="p">)):</span>
         <span class="n">dist</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x</span><span class="o">-</span><span class="n">xi</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="n">yi</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">dist</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
-        
     <span class="k">return</span> <span class="n">ind</span>
 
 <span class="c1"># Query to find closest nodes to station locations</span>
-<span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nearxy</span><span class="p">(</span><span class="n">nc</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][:],</span><span class="n">nc</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">][:],</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lon&#39;</span><span class="p">],</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lat&#39;</span><span class="p">])</span>
-<span class="n">obs</span>
+<span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nearxy</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span><span class="n">lat</span><span class="p">,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lon&#39;</span><span class="p">],</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lat&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                   Lat         Lon  NODE-ID
+Station                                    
+Cleveland OH  41.72883  278.201503     2736
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In case you do not have access to the module pyproj, please</span>
+<span class="c1"># use the code below to find the nearest point.</span>
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+<span class="c1"># Find the indices of the points in (x,y) closest to the points in (xi,yi)</span>
+<span class="c1"># def nearxy(x,y,xi,yi):</span>
+    
+<span class="c1">#     ind=np.ones(len(xi),dtype=int)</span>
+<span class="c1">#     for i in np.arange(len(xi)):</span>
+<span class="c1">#         dist=np.sqrt((x-xi[i])**2+(y-yi[i])**2)</span>
+<span class="c1">#         ind[i]=dist.argmin()</span>
+        
+<span class="c1">#     return ind</span>
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Lat</th>
-      <th>Lon</th>
-      <th>NODE-ID</th>
-    </tr>
-    <tr>
-      <th>Station</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Cleveland OH</th>
-      <td>41.72883</td>
-      <td>278.201503</td>
-      <td>2736</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
+<span class="c1"># # Query to find closest nodes to station locations</span>
+<span class="c1"># obs[&#39;NODE-ID&#39;] = nearxy(nc[&#39;lon&#39;][:],nc[&#39;lat&#39;][:],obs[&#39;Lon&#39;],obs[&#39;Lat&#39;])</span>
+<span class="c1"># print(obs)</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get temperature profile from location named above</span>
 <span class="c1"># At the time defined above</span>
-<span class="n">nsta</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
-<span class="n">z</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;siglay&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]),</span><span class="n">nsta</span><span class="p">))</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
+<span class="n">depths</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;siglay&#39;</span><span class="p">][:,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">]]</span> <span class="o">*</span> \
+         <span class="p">(</span><span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">][</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">]]</span> <span class="o">+</span> \
+         <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;zeta&#39;</span><span class="p">][</span><span class="n">itime</span><span class="p">,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">]])</span>
+
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">nc</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">][</span><span class="n">itime</span><span class="p">,:,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">]]</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">obs</span><span class="p">)):</span>
-    <span class="c1"># Find depth in meters of center of sigma layer</span>
-    <span class="n">depths</span><span class="o">=</span><span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;siglay&#39;</span><span class="p">][:,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span> <span class="o">*</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">][</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
-    <span class="n">z</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nc</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">19</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">obs</span><span class="p">)):</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="c1"># Find depth in meters of center of sigma layer</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">depths</span><span class="o">=</span><span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;siglay&#39;</span><span class="p">][:,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span> <span class="o">*</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">][</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
-<span class="ne">----&gt; </span><span class="mi">4</span>     <span class="n">z</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nc</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,:,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make a DataFrame out of the interpolated time series for the first station</span>
 
-<span class="nn">File src\netCDF4\_netCDF4.pyx:4940,</span> in <span class="ni">netCDF4._netCDF4.Variable.__getitem__</span><span class="nt">()</span>
+<span class="c1"># Index of station of plot (0 for first station in list, 1 for second station, etc)</span>
+<span class="n">station_index</span> <span class="o">=</span> <span class="mi">0</span>
 
-<span class="nn">File src\netCDF4\_netCDF4.pyx:5898,</span> in <span class="ni">netCDF4._netCDF4.Variable._get</span><span class="nt">()</span>
-
-<span class="nn">File src\netCDF4\_netCDF4.pyx:2014,</span> in <span class="ni">netCDF4._netCDF4._ensure_nc_success</span><span class="nt">()</span>
-
-<span class="ne">RuntimeError</span>: NetCDF: Authorization failure
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make a DataFrame out of the interpolated time series at each location</span>
-<span class="n">zvals</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">z</span><span class="p">[:],</span><span class="n">index</span><span class="o">=</span><span class="n">depths</span><span class="p">)</span>
+<span class="n">zvals</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">z</span><span class="p">[:,</span><span class="n">station_index</span><span class="p">],</span><span class="n">index</span><span class="o">=</span><span class="n">depths</span><span class="p">[:,</span><span class="n">station_index</span><span class="p">])</span> <span class="c1">#!!! Modified to use station index rather than assuming only one station is in the list</span>
 <span class="n">zvals</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;depth_m&#39;</span>
 <span class="n">zvals</span><span class="o">.</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;temp_C&#39;</span><span class="p">]</span>
 
-<span class="c1"># Or print all values</span>
+<span class="c1"># Print all values</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">zvals</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -861,26 +824,26 @@ filling off
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>              temp_C
 depth_m             
--0.531025   5.197840
--1.593075   5.215734
--2.655125   5.220207
--3.717175   5.222991
--4.779226   5.225032
--5.841276   5.226626
--6.903326   5.227908
--7.965375   5.228949
--9.027426   5.229790
--10.089477  5.230453
--11.151527  5.230949
--12.213576  5.231275
--13.275628  5.231416
--14.337677  5.231342
--15.399728  5.230993
--16.461779  5.230258
--17.523829  5.228909
--18.585876  5.226341
--19.647928  5.218775
--20.709980  5.188787
+-0.557662   5.159328
+-1.672987   5.161613
+-2.788311   5.164443
+-3.903636   5.166065
+-5.018961   5.167389
+-6.134285   5.168580
+-7.249609   5.169696
+-8.364934   5.170768
+-9.480259   5.171810
+-10.595584  5.172830
+-11.710909  5.173833
+-12.826232  5.174823
+-13.941559  5.175801
+-15.056882  5.176772
+-16.172207  5.177736
+-17.287533  5.178701
+-18.402855  5.179675
+-19.518179  5.180674
+-20.633505  5.181738
+-21.748831  5.183059
 </pre></div>
 </div>
 </div>
@@ -906,7 +869,7 @@ depth_m
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/4168672e277bdcf3322f4b31c5db2784774b12c85c7ce672ec5dfbfdcd1efd04.png" src="_images/4168672e277bdcf3322f4b31c5db2784774b12c85c7ce672ec5dfbfdcd1efd04.png" />
+<img alt="_images/1321cf1bb4425a2c8898ece34faa9f0d7cd3f7b698faf3067063886d296b0b81.png" src="_images/1321cf1bb4425a2c8898ece34faa9f0d7cd3f7b698faf3067063886d296b0b81.png" />
 </div>
 </div>
 </section>
@@ -921,158 +884,112 @@ depth_m
 <span class="s1">&#39;&#39;&#39;</span>
 <span class="c1"># Create a Pandas DataFrame</span>
 <span class="n">obs</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()),</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;,\s*&quot;</span><span class="p">,</span><span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;Station&#39;</span><span class="p">,</span><span class="n">engine</span><span class="o">=</span><span class="s1">&#39;python&#39;</span><span class="p">)</span>
+
 <span class="c1"># Convert longitude coordinate</span>
-<span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lon&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">360.0</span> <span class="o">+</span> <span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lon&#39;</span><span class="p">]</span>
-<span class="n">obs</span>
+<span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lon&#39;</span><span class="p">]</span> <span class="o">%=</span> <span class="mi">360</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Lat</th>
-      <th>Lon</th>
-    </tr>
-    <tr>
-      <th>Station</th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Cleveland OH</th>
-      <td>41.72883</td>
-      <td>278.201503</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                   Lat         Lon
+Station                           
+Cleveland OH  41.72883  278.201503
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Same code as the temperature profile above with addition of </span>
-<span class="c1"># nearest cell center coordinate (e.g., &#39;latc&#39; &amp; &#39;lonc&#39;)</span>
-<span class="c1"># Find the indices of the points in (x,y) closest to the points in (xi,yi)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find the indices of the points in (x,y) closest to the points in (xi,yi)</span>
 <span class="k">def</span> <span class="nf">nearxy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">yi</span><span class="p">):</span>
+    <span class="n">proj</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="s1">&#39;+proj=aea +lat_1=42.122774 +lat_2=49.01518 +lat_0=45.568977 </span><span class="se">\</span>
+<span class="s1">    +lon_0=-84.455955 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +datum=NAD83 +units=m +no_defs&#39;</span><span class="p">)</span> 
     
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">xi</span><span class="p">,</span> <span class="n">yi</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">yi</span><span class="p">))</span>
     <span class="n">ind</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xi</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xi</span><span class="p">)):</span>
         <span class="n">dist</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x</span><span class="o">-</span><span class="n">xi</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="n">yi</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">dist</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
-        
     <span class="k">return</span> <span class="n">ind</span>
 
-<span class="c1"># Query to find closest NECOFS nodes to station locations</span>
+<span class="c1"># Query to find closest nodes and elements to station locations</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
 <span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nearxy</span><span class="p">(</span><span class="n">nc</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][:],</span><span class="n">nc</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">][:],</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lon&#39;</span><span class="p">],</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lat&#39;</span><span class="p">])</span>
-<span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID-c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nearxy</span><span class="p">(</span><span class="n">nc</span><span class="p">[</span><span class="s1">&#39;lonc&#39;</span><span class="p">][:],</span><span class="n">nc</span><span class="p">[</span><span class="s1">&#39;latc&#39;</span><span class="p">][:],</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lon&#39;</span><span class="p">],</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lat&#39;</span><span class="p">])</span>
-<span class="n">obs</span>
+
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
+<span class="n">obs</span><span class="p">[</span><span class="s1">&#39;ELEM-ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nearxy</span><span class="p">(</span><span class="n">nc</span><span class="p">[</span><span class="s1">&#39;lonc&#39;</span><span class="p">][:],</span><span class="n">nc</span><span class="p">[</span><span class="s1">&#39;latc&#39;</span><span class="p">][:],</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lon&#39;</span><span class="p">],</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;Lat&#39;</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Lat</th>
-      <th>Lon</th>
-      <th>NODE-ID</th>
-      <th>NODE-ID-c</th>
-    </tr>
-    <tr>
-      <th>Station</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Cleveland OH</th>
-      <td>41.72883</td>
-      <td>278.201503</td>
-      <td>2736</td>
-      <td>5194</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create empty lists to store u,v value information</span>
-<span class="n">nsta</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
-<span class="n">sigma_layers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;siglay&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># number of depth layers</span>
-<span class="n">ui</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">sigma_layers</span><span class="p">,</span><span class="n">nsta</span><span class="p">))</span>
-<span class="n">vi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">sigma_layers</span><span class="p">,</span><span class="n">nsta</span><span class="p">))</span>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                   Lat         Lon  NODE-ID  ELEM-ID
+Station                                             
+Cleveland OH  41.72883  278.201503     2736     5194
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get u values profile from location named above</span>
-<span class="c1"># At the time defined above</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsta</span><span class="p">):</span>
-    <span class="n">ui</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nc</span><span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">][</span><span class="n">itime</span><span class="p">,:,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID-c&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get v values profile from location named above</span>
-<span class="c1"># At the time defined above</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsta</span><span class="p">):</span>
-    <span class="n">vi</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nc</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">][</span><span class="n">itime</span><span class="p">,:,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID-c&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get depths nearest observation point</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsta</span><span class="p">):</span>
-    <span class="n">depths</span><span class="o">=</span><span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;siglay&#39;</span><span class="p">][:,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span> <span class="o">*</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">][</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In case you do not have access to the module pyproj, please</span>
+<span class="c1"># use the code below to find the nearest point.</span>
 
-<span class="c1"># Make a DataFrame out of the interpolated time series at each location</span>
-<span class="n">uvals</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ui</span><span class="p">[:],</span><span class="n">index</span><span class="o">=</span><span class="n">depths</span><span class="p">)</span>
+<span class="c1"># Find the indices of the points in (x,y) closest to the points in (xi,yi)</span>
+<span class="c1"># def nearxy(x,y,xi,yi):</span>
+    
+<span class="c1">#     ind=np.ones(len(xi),dtype=int)</span>
+<span class="c1">#     for i in np.arange(len(xi)):</span>
+<span class="c1">#         dist=np.sqrt((x-xi[i])**2+(y-yi[i])**2)</span>
+<span class="c1">#         ind[i]=dist.argmin()</span>
+        
+<span class="c1">#     return ind</span>
+
+<span class="c1"># # Query to find closest nodes and elements to station locations</span>
+<span class="c1"># obs[&#39;NODE-ID&#39;] = nearxy(nc[&#39;lon&#39;][:],nc[&#39;lat&#39;][:],obs[&#39;Lon&#39;],obs[&#39;Lat&#39;])</span>
+<span class="c1"># obs[&#39;ELEM-ID&#39;] = nearxy(nc[&#39;lonc&#39;][:],nc[&#39;latc&#39;][:],obs[&#39;Lon&#39;],obs[&#39;Lat&#39;])</span>
+<span class="c1"># print(obs)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get u and v values profile from location named above</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
+<span class="n">ui</span> <span class="o">=</span> <span class="n">nc</span><span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">][</span><span class="n">itime</span><span class="p">,:,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;ELEM-ID&#39;</span><span class="p">]]</span>
+
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
+<span class="n">vi</span> <span class="o">=</span> <span class="n">nc</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">][</span><span class="n">itime</span><span class="p">,:,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;ELEM-ID&#39;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get depths nearest observation points</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">opendap_pause</span><span class="p">)</span>
+<span class="n">depths</span><span class="o">=</span><span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;siglay&#39;</span><span class="p">][:,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">]]</span> <span class="o">*</span> \
+        <span class="p">(</span><span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">][</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">]]</span> <span class="o">+</span> \
+         <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;zeta&#39;</span><span class="p">][</span><span class="n">itime</span><span class="p">,</span><span class="n">obs</span><span class="p">[</span><span class="s1">&#39;NODE-ID&#39;</span><span class="p">]])</span>    
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make a DataFrame out of the interpolated time series at the first location</span>
+<span class="c1"># Index of station of use (0 for first station in list, 1 for second station, etc)</span>
+<span class="n">station_index</span> <span class="o">=</span> <span class="mi">0</span> 
+
+<span class="n">uvals</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ui</span><span class="p">[:,</span><span class="n">station_index</span><span class="p">],</span><span class="n">index</span><span class="o">=</span><span class="n">depths</span><span class="p">[:,</span><span class="n">station_index</span><span class="p">])</span>
 <span class="n">uvals</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;depth_m&#39;</span>
 <span class="n">uvals</span><span class="o">.</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;u&#39;</span><span class="p">]</span>
 
-<span class="n">vvals</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">vi</span><span class="p">[:],</span><span class="n">index</span><span class="o">=</span><span class="n">depths</span><span class="p">)</span>
+<span class="n">vvals</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">vi</span><span class="p">[:,</span><span class="n">station_index</span><span class="p">],</span><span class="n">index</span><span class="o">=</span><span class="n">depths</span><span class="p">[:,</span><span class="n">station_index</span><span class="p">])</span>
 <span class="n">vvals</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;depth_m&#39;</span>
 <span class="n">vvals</span><span class="o">.</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span>
 
@@ -1086,26 +1003,26 @@ depth_m
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                   u         v
 depth_m                       
--0.531025   0.040028  0.026247
--1.593075   0.032888  0.015822
--2.655125   0.023069  0.004561
--3.717175   0.017605 -0.000708
--4.779226   0.013354 -0.004218
--5.841276   0.009766 -0.006768
--6.903326   0.006628 -0.008686
--7.965375   0.003832 -0.010146
--9.027426   0.001310 -0.011257
--10.089477 -0.000983 -0.012094
--11.151527 -0.003077 -0.012709
--12.213576 -0.004998 -0.013142
--13.275628 -0.006762 -0.013422
--14.337677 -0.008385 -0.013573
--15.399728 -0.009877 -0.013611
--16.461779 -0.011247 -0.013546
--17.523829 -0.012497 -0.013380
--18.585876 -0.013619 -0.013095
--19.647928 -0.014563 -0.012610
--20.709980 -0.014914 -0.011373
+-0.557662   0.040028  0.026247
+-1.672987   0.032888  0.015822
+-2.788311   0.023069  0.004561
+-3.903636   0.017605 -0.000708
+-5.018961   0.013354 -0.004218
+-6.134285   0.009766 -0.006768
+-7.249609   0.006628 -0.008686
+-8.364934   0.003832 -0.010146
+-9.480259   0.001310 -0.011257
+-10.595584 -0.000983 -0.012094
+-11.710909 -0.003077 -0.012709
+-12.826232 -0.004998 -0.013142
+-13.941559 -0.006762 -0.013422
+-15.056882 -0.008385 -0.013573
+-16.172207 -0.009877 -0.013611
+-17.287533 -0.011247 -0.013546
+-18.402855 -0.012497 -0.013380
+-19.518179 -0.013619 -0.013095
+-20.633505 -0.014563 -0.012610
+-21.748831 -0.014914 -0.011373
 </pre></div>
 </div>
 </div>
