@@ -1,0 +1,864 @@
+
+
+<!DOCTYPE html>
+
+
+<html >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Access GLCFS model output from THREDDS Server with R &#8212; NOAA GLERL Code Gallery</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'access-glcfs-fvcom-from-thredds-r';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Use R to retrieve data from NCEI" href="R-NCEI-data-retrieval.html" />
+    <link rel="prev" title="Access GLCFS model output from THREDDS Server with Python" href="access-glcfs-fvcom-from-thredds-py.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    NOAA GLERL Code Gallery Start Page
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Access</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="access-glcfs-fvcom-from-thredds-py.html">Access GLCFS model output from THREDDS Server with Python</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Access GLCFS model output from THREDDS Server with R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="R-NCEI-data-retrieval.html">Use R to retrieve data from NCEI</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Other Resources</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="http://unidata.github.io/notebook-gallery/">Unidata Jupyter Notebook Gallery</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/NOAA-GLERL/NOAA-GLERL.github.io" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/NOAA-GLERL/NOAA-GLERL.github.io/issues/new?title=Issue%20on%20page%20%2Faccess-glcfs-fvcom-from-thredds-r.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/access-glcfs-fvcom-from-thredds-r.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Access GLCFS model output from THREDDS Server with R</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-required-libraries">Load required libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#settings">Settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-url-to-read-netcdf-data">Build URL to read netCDF data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-the-fvcom-file">Loading the FVCOM file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-a-function-to-parse-fvcom-dates-times">Define a function to parse FVCOM dates &amp; times</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-fvcom-surface-temperatures">Visualize FVCOM surface temperatures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#read-plot-current-normalized-current-field">Read  &amp; plot current normalized current field</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-a-temperature-profile-near-a-given-coordinate-point">Extract a temperature profile near a given coordinate point</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="access-glcfs-model-output-from-thredds-server-with-r">
+<h1>Access GLCFS model output from THREDDS Server with R<a class="headerlink" href="#access-glcfs-model-output-from-thredds-server-with-r" title="Permalink to this headline">#</a></h1>
+<p>This notebook is help users get started using FVCOM output from the <a class="reference external" href="https://www.glerl.noaa.gov/thredds/catalog/catalog.html">GLERL THREDDS Server</a>. This example includes data from the Great Lakes Coastal Forecasting System (<a class="reference external" href="https://www.glerl.noaa.gov/res/glcfs/">GLCFS</a>). Learn more about <a class="reference external" href="https://www.glerl.noaa.gov/res/Programs/ipemf/GLCFS_nextgen.html">GLCFS here</a> and how to access both experimental and operational data on the <a class="reference external" href="https://www.glerl.noaa.gov/res/Programs/ipemf/glcfs_data_access.html">Data Access page here</a>.</p>
+<p>For plotting in R, this script uses kml files that represent the FVCOM grid nodes and elements. Users can download the kml files from the <a class="reference external" href="https://www.glerl.noaa.gov/emf/kml/">link here</a>.</p>
+<section id="load-required-libraries">
+<h2>Load required libraries<a class="headerlink" href="#load-required-libraries" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># install.packages(ncdf4)</span>
+<span class="c1"># conda install -c conda-forge r-ncdf4</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">ncdf4</span><span class="p">)</span>
+
+<span class="c1"># install.packages(sf)</span>
+<span class="c1"># conda install -c conda-forge r-sf</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span>
+
+<span class="c1"># install.packages(codetools)</span>
+<span class="c1"># conda install -c conda-forge r-codetools</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">codetools</span><span class="p">)</span>
+
+<span class="c1"># install.packages(raster)</span>
+<span class="c1"># conda install -c conda-forge r-raster</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">raster</span><span class="p">)</span>
+
+<span class="c1"># install.packages(sf)</span>
+<span class="c1"># conda install -c conda-forge r-fields</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1; sf_use_s2() is TRUE
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: sp
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: spam
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Spam version 2.9-1 (2022-08-07) is loaded.
+Type &#39;help( Spam)&#39; or &#39;demo( spam)&#39; for a short introduction 
+and overview of this package.
+Help for individual functions is also obtained by adding the
+suffix &#39;.spam&#39; to the function name, e.g. &#39;help( chol.spam)&#39;.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Attaching package: &#39;spam&#39;
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The following objects are masked from &#39;package:base&#39;:
+
+    backsolve, forwardsolve
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: viridis
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: viridisLite
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Try help(fields) to get started.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="settings">
+<h2>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lk</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&#39;erie&#39;</span><span class="w">        </span><span class="c1"># which lake?     superior | michigan-huron | hec | erie | ontario </span>
+<span class="n">typ</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&#39;nowcast&#39;</span><span class="w">    </span><span class="c1"># type of output?  nowcast | forecast</span>
+
+<span class="n">ystrday</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">format</span><span class="p">(</span><span class="nf">as.Date</span><span class="p">(</span><span class="nf">date</span><span class="p">(),</span><span class="w"> </span><span class="n">format</span><span class="o">=</span><span class="s">&#39;%c&#39;</span><span class="p">)</span><span class="m">-1</span><span class="p">,</span><span class="w"> </span><span class="n">format</span><span class="o">=</span><span class="s">&#39;%m%d%H&#39;</span><span class="p">)</span>
+<span class="n">mmddhh</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ystrday</span><span class="w">  </span><span class="c1"># date (month day hour).... init time for forecasts;  *last* hour for nowcasts</span>
+<span class="c1">#mmddhh &lt;- &#39;051500&#39;  # or set manually to some specific day</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="build-url-to-read-netcdf-data">
+<h2>Build URL to read netCDF data<a class="headerlink" href="#build-url-to-read-netcdf-data" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">base_url</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&#39;https://www.glerl.noaa.gov/thredds/dodsC/glcfs/&#39;</span>
+<span class="n">filename</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sprintf</span><span class="p">(</span><span class="s">&#39;%s_0001.nc&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mmddhh</span><span class="p">)</span>
+
+<span class="n">url</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">paste</span><span class="p">(</span><span class="n">base_url</span><span class="p">,</span><span class="w"> </span><span class="n">lk</span><span class="p">,</span><span class="w"> </span><span class="n">typ</span><span class="p">,</span><span class="w"> </span><span class="n">filename</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="n">ystrday</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] &quot;052200&quot;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="loading-the-fvcom-file">
+<h2>Loading the FVCOM file<a class="headerlink" href="#loading-the-fvcom-file" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ncid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">nc_open</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="w">  </span><span class="c1"># make sure to CLOSE netCDF stream later!  (otherwise errors will occur)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">names</span><span class="p">(</span><span class="n">ncid</span><span class="o">$</span><span class="n">var</span><span class="p">))</span><span class="w">   </span><span class="c1"># print all var names</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">ncatt_get</span><span class="p">(</span><span class="n">ncid</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;temp&#39;</span><span class="p">))</span><span class="w"> </span><span class="c1"># print temperature metadata</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> [1] &quot;nprocs&quot;             &quot;partition&quot;          &quot;x&quot;                 
+ [4] &quot;y&quot;                  &quot;lon&quot;                &quot;lat&quot;               
+ [7] &quot;xc&quot;                 &quot;yc&quot;                 &quot;lonc&quot;              
+[10] &quot;latc&quot;               &quot;siglay_center&quot;      &quot;siglev_center&quot;     
+[13] &quot;h_center&quot;           &quot;h&quot;                  &quot;nv&quot;                
+[16] &quot;iint&quot;               &quot;Itime&quot;              &quot;Itime2&quot;            
+[19] &quot;Times&quot;              &quot;zeta&quot;               &quot;nbe&quot;               
+[22] &quot;ntsn&quot;               &quot;nbsn&quot;               &quot;ntve&quot;              
+[25] &quot;nbve&quot;               &quot;a1u&quot;                &quot;a2u&quot;               
+[28] &quot;aw0&quot;                &quot;awx&quot;                &quot;awy&quot;               
+[31] &quot;art2&quot;               &quot;art1&quot;               &quot;u&quot;                 
+[34] &quot;v&quot;                  &quot;tauc&quot;               &quot;omega&quot;             
+[37] &quot;ww&quot;                 &quot;ua&quot;                 &quot;va&quot;                
+[40] &quot;temp&quot;               &quot;salinity&quot;           &quot;viscofm&quot;           
+[43] &quot;viscofh&quot;            &quot;km&quot;                 &quot;kh&quot;                
+[46] &quot;kq&quot;                 &quot;q2&quot;                 &quot;q2l&quot;               
+[49] &quot;l&quot;                  &quot;short_wave&quot;         &quot;net_heat_flux&quot;     
+[52] &quot;sensible_heat_flux&quot; &quot;latent_heat_flux&quot;   &quot;long_wave&quot;         
+[55] &quot;uwind_speed&quot;        &quot;vwind_speed&quot;        &quot;wet_nodes&quot;         
+[58] &quot;wet_cells&quot;          &quot;wet_nodes_prev_int&quot; &quot;wet_cells_prev_int&quot;
+[61] &quot;wet_cells_prev_ext&quot; &quot;aice&quot;               &quot;vice&quot;              
+[64] &quot;tsfc&quot;               &quot;uuice&quot;              &quot;vvice&quot;             
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>$long_name
+[1] &quot;temperature&quot;
+
+$standard_name
+[1] &quot;sea_water_temperature&quot;
+
+$units
+[1] &quot;degrees_C&quot;
+
+$grid
+[1] &quot;fvcom_grid&quot;
+
+$coordinates
+[1] &quot;time siglay lat lon&quot;
+
+$type
+[1] &quot;data&quot;
+
+$mesh
+[1] &quot;fvcom_mesh&quot;
+
+$location
+[1] &quot;node&quot;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-a-function-to-parse-fvcom-dates-times">
+<h2>Define a function to parse FVCOM dates &amp; times<a class="headerlink" href="#define-a-function-to-parse-fvcom-dates-times" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># hint:  add this function to your ~/.Rprofile</span>
+<span class="n">fvcom_dts</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">ncid</span><span class="p">,</span><span class="w"> </span><span class="n">origin</span><span class="o">=</span><span class="s">&#39;1970-01-01&#39;</span><span class="p">){</span>
+<span class="w">        </span><span class="n">days</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">  </span><span class="nf">ncvar_get</span><span class="p">(</span><span class="n">ncid</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Itime&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1"># days since unix epoch</span>
+<span class="w">        </span><span class="n">msec</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ncvar_get</span><span class="p">(</span><span class="n">ncid</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Itime2&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1"># millisecs since day began</span>
+<span class="w">        </span><span class="c1"># now convert to seconds and parse as POSIXct</span>
+<span class="w">        </span><span class="n">dts</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span><span class="n">days</span><span class="o">*</span><span class="m">3600</span><span class="o">*</span><span class="m">24</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">msec</span><span class="o">*</span><span class="m">1e-3</span><span class="p">,</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">tz</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;UTC&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nf">return</span><span class="p">(</span><span class="n">dts</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># now use the function</span>
+<span class="n">dts</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">fvcom_dts</span><span class="p">(</span><span class="n">ncid</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">dts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> [1] &quot;2023-05-21 13:00:00 UTC&quot; &quot;2023-05-21 14:00:00 UTC&quot;
+ [3] &quot;2023-05-21 15:00:00 UTC&quot; &quot;2023-05-21 16:00:00 UTC&quot;
+ [5] &quot;2023-05-21 17:00:00 UTC&quot; &quot;2023-05-21 18:00:00 UTC&quot;
+ [7] &quot;2023-05-21 19:00:00 UTC&quot; &quot;2023-05-21 20:00:00 UTC&quot;
+ [9] &quot;2023-05-21 21:00:00 UTC&quot; &quot;2023-05-21 22:00:00 UTC&quot;
+[11] &quot;2023-05-21 23:00:00 UTC&quot; &quot;2023-05-22 00:00:00 UTC&quot;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualize-fvcom-surface-temperatures">
+<h2>Visualize FVCOM surface temperatures<a class="headerlink" href="#visualize-fvcom-surface-temperatures" title="Permalink to this headline">#</a></h2>
+<p>Read in Thiessen Polygons corresponding to nodes and plot the surface temperature data. The voroni.kml file can be downloaded by <a class="reference external" href="https://www.glerl.noaa.gov/emf/kml/eri/voronoi.kml">clicking here</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">polys</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">st_read</span><span class="p">(</span><span class="s">&#39;https://www.glerl.noaa.gov/emf/kml/eri/voronoi.kml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reading layer `voronoi&#39; from data source 
+  `https://www.glerl.noaa.gov/emf/kml/eri/voronoi.kml&#39; using driver `KML&#39;
+Simple feature collection with 6106 features and 2 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -83.47519 ymin: 41.38285 xmax: -78.854 ymax: 42.90551
+Geodetic CRS:  WGS 84
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># read surface tmps and assign as attribute to SpatialPolygons</span>
+<span class="n">temp_sfc</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ncvar_get</span><span class="p">(</span><span class="n">ncid</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;temp&#39;</span><span class="p">)[,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">]</span>
+
+<span class="n">polys</span><span class="o">$</span><span class="bp">T</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">temp_sfc</span>
+
+<span class="c1">#draw plot</span>
+<span class="c1"># png(&#39;sfc_T.png&#39;, width=1000, height=800)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">polys</span><span class="p">[,</span><span class="s">&#39;T&#39;</span><span class="p">],</span><span class="w"> </span><span class="n">border</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span><span class="w"> </span><span class="n">axes</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span><span class="w"> </span><span class="n">nbreaks</span><span class="o">=</span><span class="m">50</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Water Surface Temp (deg C)&#39;</span><span class="p">)</span>
+<span class="nf">dev.off</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><strong>null device:</strong> 1</div><img alt="_images/ea7d54036d75016cd475753f0ebd22d50863681fa32c5593ed6e2b0f197dfc7a.png" src="_images/ea7d54036d75016cd475753f0ebd22d50863681fa32c5593ed6e2b0f197dfc7a.png" />
+</div>
+</div>
+</section>
+<section id="read-plot-current-normalized-current-field">
+<h2>Read  &amp; plot current normalized current field<a class="headerlink" href="#read-plot-current-normalized-current-field" title="Permalink to this headline">#</a></h2>
+<p>To download the elems.kml file <a class="reference external" href="https://www.glerl.noaa.gov/emf/kml/eri/elems.kml">click here</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ncvar_get</span><span class="p">(</span><span class="n">ncid</span><span class="p">,</span><span class="s">&#39;lonc&#39;</span><span class="p">)</span><span class="m">-360</span>
+<span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ncvar_get</span><span class="p">(</span><span class="n">ncid</span><span class="p">,</span><span class="s">&#39;latc&#39;</span><span class="p">)</span>
+<span class="n">lay</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="c1"># surface</span>
+<span class="n">t0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="c1"># first time step</span>
+
+<span class="n">u</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ncvar_get</span><span class="p">(</span><span class="n">ncid</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;u&#39;</span><span class="p">)[,</span><span class="n">lay</span><span class="p">,</span><span class="n">t0</span><span class="p">]</span>
+<span class="n">v</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ncvar_get</span><span class="p">(</span><span class="n">ncid</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;v&#39;</span><span class="p">)[,</span><span class="n">lay</span><span class="p">,</span><span class="n">t0</span><span class="p">]</span>
+
+<span class="n">speed</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="n">u</span><span class="o">^</span><span class="m">2</span><span class="o">+</span><span class="n">v</span><span class="o">^</span><span class="m">2</span><span class="p">)</span><span class="o">*</span><span class="m">1e3</span><span class="w"> </span>
+<span class="n">elems</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">st_read</span><span class="p">(</span><span class="s">&#39;https://www.glerl.noaa.gov/emf/kml/eri/elems.kml&#39;</span><span class="p">)</span><span class="w"> </span><span class="c1"># read in elements to get bounding box</span>
+
+<span class="nf">png</span><span class="p">(</span><span class="s">&#39;currents.png&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="o">=</span><span class="m">1200</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="o">=</span><span class="m">800</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="nf">extent</span><span class="p">(</span><span class="n">elems</span><span class="p">),</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span><span class="w"> </span><span class="n">ax</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="kc">NA</span><span class="p">)</span><span class="w"> </span><span class="c1"># draw the canvas</span>
+<span class="nf">arrows</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y0</span><span class="o">=</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span><span class="o">=</span><span class="n">x</span><span class="o">+</span><span class="n">u</span><span class="o">/</span><span class="n">speed</span><span class="p">,</span><span class="w"> </span><span class="n">y1</span><span class="o">=</span><span class="n">y</span><span class="o">+</span><span class="n">v</span><span class="o">/</span><span class="n">speed</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="o">=</span><span class="n">.</span><span class="m">05</span><span class="p">,</span><span class="w"> </span><span class="n">angle</span><span class="o">=</span><span class="m">25</span><span class="p">)</span>
+<span class="nf">dev.off</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reading layer `elements&#39; from data source 
+  `https://www.glerl.noaa.gov/emf/kml/eri/elems.kml&#39; using driver `KML&#39;
+Simple feature collection with 11509 features and 2 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: -83.47519 ymin: 41.38285 xmax: -78.854 ymax: 42.90551
+Geodetic CRS:  WGS 84
+</pre></div>
+</div>
+<div class="output text_html"><strong>png:</strong> 2</div></div>
+</div>
+</section>
+<section id="extract-a-temperature-profile-near-a-given-coordinate-point">
+<h2>Extract a temperature profile near a given coordinate point<a class="headerlink" href="#extract-a-temperature-profile-near-a-given-coordinate-point" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># define coords of interest</span>
+<span class="n">mylat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">42</span><span class="w"> </span><span class="c1"># degrees north</span>
+<span class="n">mylon</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">-82</span><span class="w"> </span><span class="c1"># longitude (negative degrees) West</span>
+<span class="n">mypts</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">cbind</span><span class="p">(</span><span class="n">mylon</span><span class="p">,</span><span class="w"> </span><span class="n">mylat</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># read in FVCOM coords and find nearest node</span>
+<span class="n">lat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ncvar_get</span><span class="p">(</span><span class="n">ncid</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;lat&#39;</span><span class="p">)</span>
+<span class="n">lon</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ncvar_get</span><span class="p">(</span><span class="n">ncid</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;lon&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">360</span>
+<span class="n">pts</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">cbind</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span><span class="w"> </span><span class="n">lat</span><span class="p">)</span>
+<span class="n">idx</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">which.min</span><span class="p">(</span><span class="nf">rdist.earth</span><span class="p">(</span><span class="n">mypts</span><span class="p">,</span><span class="w"> </span><span class="n">pts</span><span class="p">))</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="nf">cbind</span><span class="p">(</span><span class="n">lat</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span><span class="w"> </span><span class="n">lon</span><span class="p">[</span><span class="n">idx</span><span class="p">]))</span><span class="w"> </span><span class="c1"># print nearest coords for confirmation</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         [,1]      [,2]
+[1,] 41.99561 -82.01352
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># read temperature profile at specific point</span>
+<span class="n">Tz</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ncvar_get</span><span class="p">(</span><span class="n">ncid</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;temp&#39;</span><span class="p">)[</span><span class="n">idx</span><span class="p">,,]</span><span class="w"> </span><span class="c1"># dimensions [ Z x time ]</span>
+<span class="n">h</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ncvar_get</span><span class="p">(</span><span class="n">ncid</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;h&#39;</span><span class="p">)[</span><span class="n">idx</span><span class="p">]</span>
+<span class="n">sig</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ncvar_get</span><span class="p">(</span><span class="n">ncid</span><span class="p">,</span><span class="s">&#39;siglay&#39;</span><span class="p">)[</span><span class="n">idx</span><span class="p">,]</span>
+<span class="n">deps</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">as.vector</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span><span class="w"> </span><span class="c1"># generate depths vector based on sigma levs</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">png</span><span class="p">(</span><span class="s">&#39;temp_vs_depth.png&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="o">=</span><span class="m">1200</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="o">=</span><span class="m">700</span><span class="p">,</span><span class="w"> </span><span class="n">pointsize</span><span class="o">=</span><span class="m">20</span><span class="p">)</span>
+<span class="n">ti_str</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sprintf</span><span class="p">(</span><span class="s">&#39;water temp (deg C) at %4.1fN, %4.1fW&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mylat</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">mylon</span><span class="p">)</span>
+<span class="nf">image.plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">dts</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=-</span><span class="n">deps</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="o">=</span><span class="nf">t</span><span class="p">(</span><span class="n">Tz</span><span class="p">),</span><span class="w"> </span><span class="n">ylim</span><span class="o">=</span><span class="nf">rev</span><span class="p">(</span><span class="nf">range</span><span class="p">(</span><span class="o">-</span><span class="n">deps</span><span class="p">)),</span><span class="w"> </span><span class="n">ylab</span><span class="o">=</span><span class="s">&#39;depth (meters)&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="kc">NA</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="n">ti_str</span><span class="p">,</span><span class="w"> </span><span class="n">xaxt</span><span class="o">=</span><span class="s">&#39;n&#39;</span><span class="p">)</span>
+<span class="nf">axis.POSIXct</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">dts</span><span class="p">,</span><span class="w"> </span><span class="n">format</span><span class="o">=</span><span class="s">&#39;%H:%MZ&#39;</span><span class="p">)</span><span class="w"> 				 </span><span class="c1"># label hour:minute on x-axis</span>
+<span class="nf">axis.POSIXct</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">dts</span><span class="p">,</span><span class="w"> </span><span class="n">format</span><span class="o">=</span><span class="s">&#39;%b-%d&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">line</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">lwd</span><span class="o">=</span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="c1"># label month day below</span>
+<span class="nf">dev.off</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><strong>png:</strong> 2</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">nc_close</span><span class="p">(</span><span class="n">ncid</span><span class="p">)</span>
+<span class="c1"># if netcdf stream isn&#39;t closed, errors will occur next time file is accessed</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            name: "ir",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="access-glcfs-fvcom-from-thredds-py.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Access GLCFS model output from THREDDS Server with Python</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="R-NCEI-data-retrieval.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Use R to retrieve data from NCEI</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-required-libraries">Load required libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#settings">Settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-url-to-read-netcdf-data">Build URL to read netCDF data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-the-fvcom-file">Loading the FVCOM file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-a-function-to-parse-fvcom-dates-times">Define a function to parse FVCOM dates &amp; times</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualize-fvcom-surface-temperatures">Visualize FVCOM surface temperatures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#read-plot-current-normalized-current-field">Read  &amp; plot current normalized current field</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-a-temperature-profile-near-a-given-coordinate-point">Extract a temperature profile near a given coordinate point</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By NOAA Great Lakes Environmental Research Laboratory
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+    <a href="https://www.glerl.noaa.gov/home/contactus.html" target="_blank">Contact Us</a>
+    <br>
+    <p>
+    NOAA Great Lakes Environmental Research Laboratory<br>
+    4840 S. State Road<br>
+    Ann, Arbor MI 48108<br>
+    (734) 741-2235<br>
+    </p>
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
