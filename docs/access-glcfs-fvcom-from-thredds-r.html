@@ -464,7 +464,7 @@ suffix &#39;.spam&#39; to the function name, e.g. &#39;help( chol.spam)&#39;.
 <h2>Build URL to read netCDF data<a class="headerlink" href="#build-url-to-read-netcdf-data" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">base_url</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&#39;https://www.glerl.noaa.gov/thredds/dodsC/glcfs/&#39;</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">base_url</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">&#39;https://apps.glerl.noaa.gov/thredds/dodsC/glcfs/&#39;</span>
 <span class="n">filename</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sprintf</span><span class="p">(</span><span class="s">&#39;%s_0001.nc&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mmddhh</span><span class="p">)</span>
 
 <span class="n">url</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">paste</span><span class="p">(</span><span class="n">base_url</span><span class="p">,</span><span class="w"> </span><span class="n">lk</span><span class="p">,</span><span class="w"> </span><span class="n">typ</span><span class="p">,</span><span class="w"> </span><span class="n">filename</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
